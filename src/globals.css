@@ -1,0 +1,159 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 20% 98%;
+    --foreground: 240 10% 3.9%;
+    
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    
+    --primary: 197 71% 55%;
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 240 5.9% 10%;
+    
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 240 3.8% 46.1%;
+    
+    --accent: 0 71% 65%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 197 71% 55%;
+    
+    --radius: 0.75rem;
+
+    /* Custom colors for SkillForge-like theme */
+    --brand: hsl(197, 71%, 55%);
+    --brand-light: hsla(197, 71%, 55%, 0.1);
+    --neutral-bg: hsl(0, 0%, 100%);
+    --neutral-surface: hsl(0, 0%, 97%);
+    --neutral-surfaceAlt: hsl(30, 20%, 96%);
+    --neutral-border: rgba(0, 0, 0, 0.1);
+    --neutral-text: hsl(0, 0%, 0%);
+    --neutral-text-muted: hsl(0, 0%, 13%);
+    --accent-peach: hsl(30, 93%, 84%);
+    --accent-green: hsl(106, 73%, 80%);
+    --accent-yellow: hsl(45, 96%, 67%);
+  }
+
+  .dark {
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
+
+    --card: 222 47% 11%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 47% 11%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 197 71% 65%;
+    --primary-foreground: 222 47% 11%;
+
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+    
+    --accent: 0 71% 72%;
+    --accent-foreground: 210 40% 98%;
+    
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 197 71% 65%;
+
+    --brand: hsl(197, 71%, 65%);
+    --brand-light: hsla(197, 71%, 65%, 0.1);
+    --neutral-bg: hsl(222, 47%, 11%);
+    --neutral-surface: hsl(222, 47%, 14%);
+    --neutral-surfaceAlt: hsl(222, 47%, 12%);
+    --neutral-border: rgba(255, 255, 255, 0.1);
+    --neutral-text: hsl(0, 0%, 100%);
+    --neutral-text-muted: hsl(215, 20%, 65%);
+  }
+}
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+  body {
+    @apply bg-neutral-bg text-neutral-text font-sans antialiased;
+    font-family: var(--font-inter-tight), sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  /* Smooth transitions for theme changes - always enabled */
+  *, *::before, *::after {
+    transition-property: background-color, border-color, color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+  }
+  .dg-scroll-lock,
+  .lightbox-open {
+    overflow: hidden;
+  }
+}
+
+@layer components {
+  /* Button slide animation */
+  .btn-text-slide-group {
+    @apply flex flex-col transition-transform duration-500 will-change-transform;
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .group:hover .btn-text-slide-group {
+    transform: translateY(-50%);
+  }
+
+  /* Scroll Reveal Base */
+  .reveal-item {
+    opacity: 0;
+    will-change: transform, opacity;
+  }
+  .reveal-up { transform: translateY(60px); }
+  .reveal-down { transform: translateY(-60px); }
+  .reveal-left { transform: translateX(-80px); }
+  .reveal-right { transform: translateX(80px); }
+
+  /* Active state */
+  .reveal-item.revealed {
+    opacity: 1 !important;
+    transform: translate(0, 0) !important;
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out !important;
+  }
+
+  /* Reusable professional card style */
+  .testimonial-card {
+    @apply rounded-2xl border border-neutral-border bg-neutral-surface;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  }
+  .dark .testimonial-card {
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.3);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-shadow-lg {
+    text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  }
+  .text-shadow-md {
+    text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+}
