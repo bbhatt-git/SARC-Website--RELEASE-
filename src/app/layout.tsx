@@ -8,7 +8,7 @@ import Footer from '@/app/components/footer';
 import { Inter_Tight } from 'next/font/google';
 import { ThemeProvider } from './components/theme-provider';
 import { SpeedInsights } from '@vercel/speed-insights/next';
-import AnimationProvider from './components/AnimationProvider';
+import GSAPProvider from './components/GSAPProvider';
 
 const interTight = Inter_Tight({
   subsets: ['latin'],
@@ -126,7 +126,7 @@ export default function RootLayout({
           <main className="flex-grow pt-20">{children}</main>
           <Footer />
           <Toaster />
-          <AnimationProvider />
+          <GSAPProvider />
           <SpeedInsights />
         </ThemeProvider>
       </body>

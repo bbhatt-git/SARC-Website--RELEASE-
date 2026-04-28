@@ -49,42 +49,45 @@
   }
 
   .dark {
-    --background: 222 47% 11%;
-    --foreground: 210 40% 98%;
+    --background: 225 30% 8%;
+    --foreground: 225 20% 95%;
 
-    --card: 222 47% 11%;
-    --card-foreground: 210 40% 98%;
+    --card: 225 30% 10%;
+    --card-foreground: 225 20% 95%;
 
-    --popover: 222 47% 11%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 225 30% 10%;
+    --popover-foreground: 225 20% 95%;
 
-    --primary: 197 71% 65%;
-    --primary-foreground: 222 47% 11%;
+    --primary: 200 80% 55%;
+    --primary-foreground: 225 30% 8%;
 
-    --secondary: 217 33% 17%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 225 30% 15%;
+    --secondary-foreground: 225 20% 95%;
 
-    --muted: 217 33% 17%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 225 30% 15%;
+    --muted-foreground: 225 10% 65%;
     
-    --accent: 0 71% 72%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 340 80% 55%;
+    --accent-foreground: 225 30% 8%;
     
-    --destructive: 0 63% 31%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 225 20% 95%;
 
-    --border: 217 33% 17%;
-    --input: 217 33% 17%;
-    --ring: 197 71% 65%;
+    --border: 225 30% 18%;
+    --input: 225 30% 18%;
+    --ring: 200 80% 55%;
 
-    --brand: hsl(197, 71%, 65%);
-    --brand-light: hsla(197, 71%, 65%, 0.1);
-    --neutral-bg: hsl(222, 47%, 11%);
-    --neutral-surface: hsl(222, 47%, 14%);
-    --neutral-surfaceAlt: hsl(222, 47%, 12%);
-    --neutral-border: rgba(255, 255, 255, 0.1);
-    --neutral-text: hsl(0, 0%, 100%);
-    --neutral-text-muted: hsl(215, 20%, 65%);
+    --brand: hsl(200, 80%, 55%);
+    --brand-light: hsla(200, 80%, 55%, 0.12);
+    --neutral-bg: hsl(225, 30%, 8%);
+    --neutral-surface: hsl(225, 30%, 12%);
+    --neutral-surfaceAlt: hsl(225, 30%, 10%);
+    --neutral-border: rgba(255, 255, 255, 0.08);
+    --neutral-text: hsl(225, 20%, 95%);
+    --neutral-text-muted: hsl(225, 10%, 65%);
+    --accent-peach: hsl(25, 80%, 60%);
+    --accent-green: hsl(150, 70%, 50%);
+    --accent-yellow: hsl(45, 90%, 55%);
   }
 }
 
