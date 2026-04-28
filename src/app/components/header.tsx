@@ -17,11 +17,12 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle, SheetDescription, SheetClose } from "@/components/ui/sheet";
-import { Search, ArrowRight, ChevronRight, X, ChevronDown } from 'lucide-react';
+import { Search, ArrowRight, ChevronRight, X, ChevronDown, Menu } from 'lucide-react';
 import { ModeToggle } from '@/components/mode-toggle';
 import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { motion, AnimatePresence } from 'framer-motion';
 
 
 const ListItem = React.forwardRef<
@@ -104,72 +105,108 @@ export default function Header() {
 
 
   return (
-    <header className={cn(
-        "w-full fixed top-0 left-0 z-50 transition-all duration-300 bg-neutral-bg/90 backdrop-blur-md",
-        hasScrolled ? 'border-b border-neutral-border shadow-sm' : 'border-b border-transparent'
-    )}>
-      <div className="container mx-auto h-20 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-3 group">
-          <Image src="/images/sarc.png" alt="SARC Logo" width={40} height={40} className="transition-transform group-hover:scale-105"/>
-          <div className="flex flex-col items-start justify-center h-[40px]" style={{ lineHeight: 0.8, marginTop: '-2px' }}>
-            <span className="font-semibold text-primary text-lg tracking-tight">SARC EDU.</span>
-            <span className="font-bold text-foreground tracking-[0.1em] text-[10px] uppercase">FOUNDATION</span>
-          </div>
-        </Link>
-        
+    <motion.header
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+      className={cn(
+        "w-full fixed top-0 left-0 z-50 transition-all duration-300 bg-neutral-bg/95 backdrop-blur-xl border-b border-neutral-border/50",
+        hasScrolled ? 'shadow-lg shadow-black/5' : 'shadow-sm'
+      )}
+    >
+      <div className="container mx-auto h-16 flex items-center justify-between">
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.1 }}
+        >
+          <Link href="/" className="flex items-center gap-3 group">
+            <motion.div
+              whileHover={{ scale: 1.05, rotate: 5 }}
+              transition={{ type: "spring", stiffness: 400 }}
+            >
+              <Image src="/images/sarc.png" alt="SARC Logo" width={40} height={40} />
+            </motion.div>
+            <div className="flex flex-col items-start justify-center h-[40px]" style={{ lineHeight: 0.8, marginTop: '-2px' }}>
+              <span className="font-semibold text-primary text-lg tracking-tight">SARC EDU.</span>
+              <span className="font-bold text-foreground tracking-[0.1em] text-[10px] uppercase">FOUNDATION</span>
+            </div>
+          </Link>
+        </motion.div>
+
         {/* Desktop Navigation */}
         <NavigationMenu className="hidden lg:flex">
           <NavigationMenuList>
-            {NAV_LINKS.map((link) => (
-              <NavigationMenuItem key={link.label}>
-                {link.children ? (
-                  <>
-                    <NavigationMenuTrigger>{link.label}</NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                      <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-neutral-bg">
-                        {link.children.map((child) => (
-                          <ListItem key={child.label} href={child.href} title={child.label}>
-                            {child.description}
-                          </ListItem>
-                        ))}
-                      </ul>
-                    </NavigationMenuContent>
-                  </>
-                ) : (
-                  <NavigationMenuLink asChild>
-                    <Link href={link.href!} className={navigationMenuTriggerStyle()}>
-                      {link.label}
-                    </Link>
-                  </NavigationMenuLink>
-                )}
-              </NavigationMenuItem>
+            {NAV_LINKS.map((link, index) => (
+              <motion.div
+                key={link.label}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 + index * 0.05 }}
+              >
+                <NavigationMenuItem>
+                  {link.children ? (
+                    <>
+                      <NavigationMenuTrigger className="group relative">
+                        {link.label}
+                        <motion.div
+                          className="absolute bottom-0 left-0 h-0.5 bg-primary"
+                          initial={{ width: 0 }}
+                          whileHover={{ width: "100%" }}
+                          transition={{ duration: 0.2 }}
+                        />
+                      </NavigationMenuTrigger>
+                      <NavigationMenuContent>
+                        <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-neutral-bg">
+                          {link.children.map((child) => (
+                            <ListItem key={child.label} href={child.href} title={child.label}>
+                              {child.description}
+                            </ListItem>
+                          ))}
+                        </ul>
+                      </NavigationMenuContent>
+                    </>
+                  ) : (
+                    <NavigationMenuLink asChild>
+                      <Link href={link.href!} className={navigationMenuTriggerStyle()}>
+                        {link.label}
+                      </Link>
+                    </NavigationMenuLink>
+                  )}
+                </NavigationMenuItem>
+              </motion.div>
             ))}
           </NavigationMenuList>
         </NavigationMenu>
 
-        <div className="flex items-center gap-2">
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.2 }}
+          className="flex items-center gap-3"
+        >
             <div className="hidden lg:block w-48">
               <SearchBar />
             </div>
             <ModeToggle />
-            <Button asChild className="hidden lg:inline-flex h-10 px-5 rounded-lg font-semibold transition-all duration-300 hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]">
-              <Link href="/admissions">Apply Now</Link>
-            </Button>
-          
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button asChild className="hidden lg:inline-flex h-10 px-5 rounded-lg font-semibold transition-all duration-300 hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]">
+                <Link href="/admissions">Apply Now</Link>
+              </Button>
+            </motion.div>
+
             {/* Mobile Menu Trigger */}
             <div className="lg:hidden">
               <Sheet open={isMobileMenuOpen} onOpenChange={setMobileMenuOpen}>
                 <SheetTrigger asChild>
-                    <button
-                        className="lg:hidden relative h-8 w-8 z-50"
+                    <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        className="lg:hidden relative h-10 w-10 z-50 flex items-center justify-center rounded-lg hover:bg-neutral-surface transition-colors"
                         aria-label="Toggle menu"
                     >
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-4">
-                            <span className="absolute left-0 top-0 h-0.5 w-full bg-foreground"></span>
-                            <span className="absolute left-0 top-1/2 -translate-y-1/2 h-0.5 w-3/4 bg-foreground"></span>
-                            <span className="absolute left-0 bottom-0 h-0.5 w-1/2 bg-foreground"></span>
-                        </div>
-                    </button>
+                        <Menu className="h-5 w-5" />
+                    </motion.button>
                 </SheetTrigger>
                 <SheetContent side="right" className="max-w-sm bg-neutral-bg p-0 flex flex-col">
                     <SheetHeader className="p-4 flex-row items-center justify-between border-b border-neutral-border">
@@ -191,7 +228,7 @@ export default function Header() {
                            </SheetClose>
                          </div>
                     </SheetHeader>
-                   
+
                     <div className="p-4 border-b border-neutral-border">
                       <SearchBar />
                     </div>
@@ -236,8 +273,8 @@ export default function Header() {
                 </SheetContent>
               </Sheet>
             </div>
-        </div>
+        </motion.div>
       </div>
-    </header>
+    </motion.header>
   );
 }

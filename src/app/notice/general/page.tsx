@@ -3,8 +3,8 @@ import GeneralNoticeView from './view';
 import { createClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
-  title: 'General Notices',
-  description: 'Stay updated with the latest announcements, news, and general notices from SARC Education Foundation.',
+  title: 'Notices',
+  description: 'Stay updated with the latest announcements from SARC Education Foundation.',
 };
 
 export default async function GeneralNoticePage() {
@@ -12,15 +12,14 @@ export default async function GeneralNoticePage() {
   const { data: notices, error } = await supabase
     .from('notices')
     .select('*')
-    .eq('type', 'general')
     .order('date', { ascending: false });
 
   if (error) {
-    console.error("Error fetching general notices:", error.message);
-    return <GeneralNoticeView initialNotices={[]} />;
+    console.error("Error fetching notices:", error.message);
+    return <GeneralNoticeView notices={[]} />;
   }
 
   // Ensure data is a plain object before passing to client component
-  const generalNotices = JSON.parse(JSON.stringify(notices || []));
-  return <GeneralNoticeView initialNotices={generalNotices} />;
+  const safeNotices = JSON.parse(JSON.stringify(notices || []));
+  return <GeneralNoticeView notices={safeNotices} />;
 }

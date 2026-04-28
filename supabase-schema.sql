@@ -28,17 +28,14 @@
 -- ============================================================================
 
 -- ============================================================================
--- 1. UNIFIED NOTICES (General + Holiday combined)
+-- 1. NOTICES (Single type - no categories)
 -- ============================================================================
 CREATE TABLE IF NOT EXISTS notices (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     title TEXT NOT NULL,
     date DATE NOT NULL,
-    type TEXT NOT NULL CHECK (type IN ('general', 'holiday')),
-    summary TEXT NOT NULL,
-    details TEXT,
+    description TEXT,
     image_url TEXT,
-    icon TEXT DEFAULT 'Bell' CHECK (icon IN ('Bell', 'Calendar', 'FileText', 'Award')),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
@@ -98,10 +95,8 @@ CREATE POLICY "Only authenticated users can delete results"
 -- ============================================================================
 CREATE TABLE IF NOT EXISTS push_notices (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    title TEXT NOT NULL,
-    date DATE NOT NULL,
+    title TEXT,
     image_url TEXT NOT NULL,
-    link TEXT DEFAULT '',
     is_active BOOLEAN DEFAULT true,
     display_until DATE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -235,56 +230,3 @@ GRANT SELECT ON push_notices TO anon;
 GRANT INSERT ON admission_inquiries TO anon;
 GRANT INSERT ON contact_messages TO anon;
 
--- ============================================================================
--- 8. STORAGE BUCKETS (For image uploads)
--- ============================================================================
-
--- Create the notice-images bucket for storing notice and push notice images
--- This needs to be run in Supabase SQL Editor with 'postgres' role or via Supabase Dashboard
-
--- First, enable storage if not already enabled (requires superuser, usually done by default)
--- Then create the bucket and set policies
-
--- IMPORTANT: Run these commands in Supabase Dashboard > SQL Editor
--- Or use Supabase CLI/API to create buckets
-
-/*
--- Create bucket (run this in Supabase Dashboard SQL Editor as postgres)
-insert into storage.buckets (id, name, public) 
-values ('notice-images', 'notice-images', true);
-
--- Policy: Allow public read access to notice-images
-CREATE POLICY "Public can view notice images" 
-    ON storage.objects FOR SELECT 
-    USING (bucket_id = 'notice-images');
-
--- Policy: Allow authenticated users to upload images
-CREATE POLICY "Authenticated users can upload images" 
-    ON storage.objects FOR INSERT 
-    TO authenticated 
-    WITH CHECK (bucket_id = 'notice-images');
-
--- Policy: Allow authenticated users to update their own images
-CREATE POLICY "Authenticated users can update images" 
-    ON storage.objects FOR UPDATE 
-    TO authenticated 
-    USING (bucket_id = 'notice-images');
-
--- Policy: Allow authenticated users to delete images
-CREATE POLICY "Authenticated users can delete images" 
-    ON storage.objects FOR DELETE 
-    TO authenticated 
-    USING (bucket_id = 'notice-images');
-*/
-
--- Alternative: Create bucket via Supabase Dashboard
--- 1. Go to Storage in left sidebar
--- 2. Click "New bucket"
--- 3. Name: notice-images
--- 4. Check "Public bucket"
--- 5. Click "Create bucket"
--- 6. Then add these policies in the bucket's Policies tab:
---    - SELECT: Public (for everyone)
---    - INSERT: Authenticated
---    - UPDATE: Authenticated  
---    - DELETE: Authenticated

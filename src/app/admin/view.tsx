@@ -3,7 +3,7 @@
 
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { Loader2, Inbox, User, Phone, GraduationCap, Users2, Menu, X, Check, Bell, Calendar, FileText, Award, Search, Plus, Trash2, Edit } from 'lucide-react';
+import { Loader2, Inbox, User, Phone, GraduationCap, Users2, Menu, X, Check, Bell, Calendar, FileText, Award, Search, Plus, Trash2, Edit, Image as ImageIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -377,18 +377,15 @@ const NoticesTab = ({ notices: initialNotices }: { notices: Notice[] }) => {
     const [formData, setFormData] = useState<Partial<Notice>>({
         title: '',
         date: new Date().toISOString().split('T')[0],
-        type: 'general',
-        summary: '',
-        details: '',
+        description: '',
         image_url: '',
-        icon: 'Bell',
     });
 
     const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        // Upload to Supabase Storage (no 1MB limit!)
+        // Upload image to GitHub
         setIsUploading(true);
         try {
             const base64 = await new Promise<string>((resolve) => {
@@ -431,7 +428,7 @@ const NoticesTab = ({ notices: initialNotices }: { notices: Notice[] }) => {
             }
             setIsDialogOpen(false);
             setEditingNotice(null);
-            setFormData({ title: '', date: new Date().toISOString().split('T')[0], type: 'general', summary: '', details: '', image_url: '', icon: 'Bell' });
+            setFormData({ title: '', date: new Date().toISOString().split('T')[0], description: '', image_url: '' });
         } catch (error: any) {
             toast({ variant: 'destructive', title: 'Error', description: error.message });
         } finally {
@@ -441,7 +438,7 @@ const NoticesTab = ({ notices: initialNotices }: { notices: Notice[] }) => {
 
     const handleDelete = async (id: string) => {
         if (!confirm('Are you sure you want to delete this notice?')) return;
-        
+
         try {
             await deleteNotice(id);
             setNotices(notices.filter(n => n.id !== id));
@@ -459,12 +456,9 @@ const NoticesTab = ({ notices: initialNotices }: { notices: Notice[] }) => {
 
     const openCreateDialog = () => {
         setEditingNotice(null);
-        setFormData({ title: '', date: new Date().toISOString().split('T')[0], type: 'general', summary: '', details: '', image_url: '', icon: 'Bell' });
+        setFormData({ title: '', date: new Date().toISOString().split('T')[0], description: '', image_url: '' });
         setIsDialogOpen(true);
     };
-
-    const generalNotices = notices.filter(n => n.type === 'general');
-    const holidayNotices = notices.filter(n => n.type === 'holiday');
 
     return (
         <div className="space-y-6">
@@ -474,84 +468,40 @@ const NoticesTab = ({ notices: initialNotices }: { notices: Notice[] }) => {
                     <Plus className="w-4 h-4" /> Add Notice
                 </Button>
             </div>
-            
-            {/* General Notices Section */}
-            {generalNotices.length > 0 && (
-                <div>
-                    <h4 className="text-md font-medium mb-3 text-muted-foreground">General Notices ({generalNotices.length})</h4>
-                    <div className="grid gap-4">
-                        {generalNotices.map((notice) => (
-                            <Card key={notice.id} className="p-4">
-                                <div className="flex gap-4">
-                                    {notice.image_url && (
-                                        <div className="relative w-24 h-24 rounded-lg overflow-hidden shrink-0">
-                                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                                            <img src={notice.image_url} alt={notice.title} className="w-full h-full object-cover" />
+
+            {notices.length > 0 ? (
+                <div className="grid gap-4">
+                    {notices.map((notice) => (
+                        <Card key={notice.id} className="p-4">
+                            <div className="flex gap-4">
+                                {notice.image_url && (
+                                    <div className="relative w-24 h-24 rounded-lg overflow-hidden shrink-0">
+                                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                                        <img src={notice.image_url} alt={notice.title} className="w-full h-full object-cover" />
+                                    </div>
+                                )}
+                                <div className="flex-1">
+                                    <div className="flex justify-between items-start">
+                                        <div>
+                                            <h4 className="font-semibold text-lg">{notice.title}</h4>
+                                            <p className="text-sm text-muted-foreground">{notice.date}</p>
+                                            {notice.description && <p className="text-sm mt-2">{notice.description}</p>}
                                         </div>
-                                    )}
-                                    <div className="flex-1">
-                                        <div className="flex justify-between items-start">
-                                            <div>
-                                                <h4 className="font-semibold text-lg">{notice.title}</h4>
-                                                <p className="text-sm text-muted-foreground">{notice.date} • {notice.icon}</p>
-                                                <p className="text-sm mt-2">{notice.summary}</p>
-                                            </div>
-                                            <div className="flex gap-2">
-                                                <Button variant="ghost" size="icon" onClick={() => openEditDialog(notice)}>
-                                                    <Edit className="w-4 h-4" />
-                                                </Button>
-                                                <Button variant="ghost" size="icon" onClick={() => handleDelete(notice.id!)}>
-                                                    <Trash2 className="w-4 h-4 text-destructive" />
-                                                </Button>
-                                            </div>
+                                        <div className="flex gap-2">
+                                            <Button variant="ghost" size="icon" onClick={() => openEditDialog(notice)}>
+                                                <Edit className="w-4 h-4" />
+                                            </Button>
+                                            <Button variant="ghost" size="icon" onClick={() => handleDelete(notice.id!)}>
+                                                <Trash2 className="w-4 h-4 text-destructive" />
+                                            </Button>
                                         </div>
                                     </div>
                                 </div>
-                            </Card>
-                        ))}
-                    </div>
+                            </div>
+                        </Card>
+                    ))}
                 </div>
-            )}
-
-            {/* Holiday Notices Section */}
-            {holidayNotices.length > 0 && (
-                <div>
-                    <h4 className="text-md font-medium mb-3 text-muted-foreground">Holiday Notices ({holidayNotices.length})</h4>
-                    <div className="grid gap-4">
-                        {holidayNotices.map((notice) => (
-                            <Card key={notice.id} className="p-4">
-                                <div className="flex gap-4">
-                                    {notice.image_url && (
-                                        <div className="relative w-24 h-24 rounded-lg overflow-hidden shrink-0">
-                                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                                            <img src={notice.image_url} alt={notice.title} className="w-full h-full object-cover" />
-                                        </div>
-                                    )}
-                                    <div className="flex-1">
-                                        <div className="flex justify-between items-start">
-                                            <div>
-                                                <h4 className="font-semibold text-lg">{notice.title}</h4>
-                                                <p className="text-sm text-muted-foreground">{notice.date}</p>
-                                                <p className="text-sm mt-2">{notice.summary}</p>
-                                            </div>
-                                            <div className="flex gap-2">
-                                                <Button variant="ghost" size="icon" onClick={() => openEditDialog(notice)}>
-                                                    <Edit className="w-4 h-4" />
-                                                </Button>
-                                                <Button variant="ghost" size="icon" onClick={() => handleDelete(notice.id!)}>
-                                                    <Trash2 className="w-4 h-4 text-destructive" />
-                                                </Button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </Card>
-                        ))}
-                    </div>
-                </div>
-            )}
-
-            {notices.length === 0 && (
+            ) : (
                 <p className="text-muted-foreground text-center py-8">No notices yet. Create your first notice!</p>
             )}
 
@@ -561,50 +511,24 @@ const NoticesTab = ({ notices: initialNotices }: { notices: Notice[] }) => {
                         <DialogTitle className="text-2xl">{editingNotice ? 'Edit Notice' : 'Create Notice'}</DialogTitle>
                     </DialogHeader>
                     <form onSubmit={handleSubmit} className="space-y-4">
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <Label>Type</Label>
-                                <Select value={formData.type} onValueChange={(v: 'general' | 'holiday') => setFormData({...formData, type: v})}>
-                                    <SelectTrigger><SelectValue /></SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="general">General Notice</SelectItem>
-                                        <SelectItem value="holiday">Holiday Notice</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                            <div className="space-y-2">
-                                <Label>Date</Label>
-                                <Input type="date" value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} required />
-                            </div>
-                        </div>
                         <div className="space-y-2">
                             <Label>Title</Label>
                             <Input value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} required />
                         </div>
-                        {formData.type === 'general' && (
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="space-y-2">
-                                    <Label>Icon</Label>
-                                    <Select value={formData.icon} onValueChange={v => setFormData({...formData, icon: v})}>
-                                        <SelectTrigger><SelectValue /></SelectTrigger>
-                                        <SelectContent>
-                                            {iconOptions.map(opt => (
-                                                <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                            </div>
-                        )}
                         <div className="space-y-2">
-                            <Label>Summary</Label>
-                            <Textarea value={formData.summary} onChange={e => setFormData({...formData, summary: e.target.value})} required />
+                            <Label>Date</Label>
+                            <Input type="date" value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} required />
                         </div>
                         <div className="space-y-2">
-                            <Label>Image (Optional)</Label>
+                            <Label>Description (Optional if image is uploaded)</Label>
+                            <Textarea value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})}
+                                placeholder="Enter notice description..." rows={4} />
+                        </div>
+                        <div className="space-y-2">
+                            <Label>Image Upload (Optional if description is provided)</Label>
                             <div className="flex gap-2">
-                                <Input 
-                                    type="file" 
+                                <Input
+                                    type="file"
                                     accept="image/*"
                                     onChange={handleImageUpload}
                                     disabled={isUploading}
@@ -619,14 +543,9 @@ const NoticesTab = ({ notices: initialNotices }: { notices: Notice[] }) => {
                                 </div>
                             )}
                         </div>
-                        <div className="space-y-2">
-                            <Label>Details (optional)</Label>
-                            <Textarea value={formData.details} onChange={e => setFormData({...formData, details: e.target.value})} 
-                                placeholder="Rich content for the notice detail view..." rows={4} />
-                        </div>
                         <DialogFooter>
                             <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
-                            <Button type="submit" disabled={isSubmitting || isUploading}>
+                            <Button type="submit" disabled={isSubmitting || isUploading || (!formData.description && !formData.image_url)}>
                                 {isSubmitting ? <Loader2 className="animate-spin" /> : (editingNotice ? 'Update' : 'Create')}
                             </Button>
                         </DialogFooter>
@@ -659,7 +578,7 @@ const PushNoticesTab = ({ notices: initialNotices }: { notices: PushNotice[] }) 
         const file = e.target.files?.[0];
         if (!file) return;
 
-        // No 1MB limit - using Supabase Storage!
+        // No size limit - using GitHub API!
         setIsUploading(true);
         try {
             const base64 = await new Promise<string>((resolve) => {
@@ -746,7 +665,7 @@ const PushNoticesTab = ({ notices: initialNotices }: { notices: PushNotice[] }) 
 
     const openCreateDialog = () => {
         setEditingNotice(null);
-        setFormData({ title: '', date: new Date().toISOString().split('T')[0], image_url: '', link: '', is_active: true, display_until: null });
+        setFormData({ title: '', image_url: '', is_active: true, display_until: '' });
         setIsDialogOpen(true);
     };
 
@@ -772,15 +691,9 @@ const PushNoticesTab = ({ notices: initialNotices }: { notices: PushNotice[] }) 
                             <div className="flex-1">
                                 <div className="flex justify-between items-start">
                                     <div>
-                                        <h4 className="font-semibold text-lg">{notice.title}</h4>
-                                        <p className="text-sm text-muted-foreground">Date: {notice.date}</p>
+                                        {notice.title && <p className="text-sm font-medium">{notice.title}</p>}
                                         {notice.display_until && (
                                             <p className="text-xs text-muted-foreground">Display until: {notice.display_until}</p>
-                                        )}
-                                        {notice.link && (
-                                            <a href={notice.link} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline break-all">
-                                                {notice.link}
-                                            </a>
                                         )}
                                     </div>
                                     <div className="flex gap-2">
@@ -812,38 +725,26 @@ const PushNoticesTab = ({ notices: initialNotices }: { notices: PushNotice[] }) 
                     </DialogHeader>
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div className="space-y-2">
-                            <Label>Title</Label>
-                            <Input 
-                                value={formData.title} 
-                                onChange={e => setFormData({...formData, title: e.target.value})} 
-                                placeholder="Urgent: School Closure Notice"
-                                required 
+                            <Label>Title (Optional - for admin reference only)</Label>
+                            <Input
+                                value={formData.title || ''}
+                                onChange={e => setFormData({...formData, title: e.target.value})}
+                                placeholder="Internal title for reference"
                             />
                         </div>
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <Label>Notice Date</Label>
-                                <Input 
-                                    type="date" 
-                                    value={formData.date} 
-                                    onChange={e => setFormData({...formData, date: e.target.value})} 
-                                    required 
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <Label>Display Until (Optional)</Label>
-                                <Input 
-                                    type="date" 
-                                    value={formData.display_until || ''} 
-                                    onChange={e => setFormData({...formData, display_until: e.target.value || null})} 
-                                />
-                            </div>
+                        <div className="space-y-2">
+                            <Label>Display Until (Optional)</Label>
+                            <Input
+                                type="date"
+                                value={formData.display_until || ''}
+                                onChange={e => setFormData({...formData, display_until: e.target.value})}
+                            />
                         </div>
                         <div className="space-y-2">
                             <Label>Image</Label>
                             <div className="flex gap-2">
-                                <Input 
-                                    type="file" 
+                                <Input
+                                    type="file"
                                     accept="image/*"
                                     onChange={handleImageUpload}
                                     disabled={isUploading}
@@ -858,20 +759,11 @@ const PushNoticesTab = ({ notices: initialNotices }: { notices: PushNotice[] }) 
                                 </div>
                             )}
                         </div>
-                        <div className="space-y-2">
-                            <Label>Link (Optional)</Label>
-                            <Input 
-                                type="url"
-                                value={formData.link} 
-                                onChange={e => setFormData({...formData, link: e.target.value})}
-                                placeholder="https://example.com/full-notice"
-                            />
-                        </div>
                         <div className="flex items-center gap-2">
-                            <input 
-                                type="checkbox" 
+                            <input
+                                type="checkbox"
                                 id="is_active"
-                                checked={formData.is_active} 
+                                checked={formData.is_active}
                                 onChange={e => setFormData({...formData, is_active: e.target.checked})}
                                 className="rounded border-gray-300"
                             />

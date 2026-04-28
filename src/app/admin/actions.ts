@@ -6,18 +6,15 @@ import { revalidatePath } from 'next/cache';
 type ExcelFileType = 'notice' | 'results';
 
 // ============================================================================
-// UNIFIED NOTICES CRUD (General + Holiday merged)
+// NOTICES CRUD (Single type - no categories)
 // ============================================================================
 
 export type Notice = {
   id?: string;
   title: string;
   date: string;
-  type: 'general' | 'holiday';
-  summary: string;
-  details?: string;
+  description?: string;
   image_url?: string;
-  icon?: string;
   created_at?: string;
 };
 
@@ -27,7 +24,7 @@ export async function getNotices() {
     .from('notices')
     .select('*')
     .order('date', { ascending: false });
-  
+
   if (error) throw new Error(error.message);
   return data as Notice[];
 }
@@ -240,10 +237,8 @@ export async function importResultsFromCSV(csvContent: string): Promise<{ succes
 
 export type PushNotice = {
   id?: string;
-  title: string;
-  date: string;
+  title?: string;
   image_url: string;
-  link: string;
   is_active: boolean;
   display_until?: string | null;
   created_at?: string;
@@ -255,7 +250,7 @@ export async function getPushNotices() {
     .from('push_notices')
     .select('*')
     .order('created_at', { ascending: false });
-  
+
   if (error) throw new Error(error.message);
   return data as PushNotice[];
 }
@@ -263,7 +258,7 @@ export async function getPushNotices() {
 export async function getActivePushNotices() {
   const supabase = await createClient();
   const today = new Date().toISOString().split('T')[0];
-  
+
   const { data, error } = await supabase
     .from('push_notices')
     .select('*')
