@@ -23,52 +23,52 @@ export default function AchievementsView() {
         subtitle="Celebrating excellence, innovation, and the remarkable success of our students and alumni" 
       />
 
-      <section className="py-20">
-        <div className="container mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center max-w-4xl mx-auto">
+      <section className="py-12 md:py-16">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 text-center max-w-4xl mx-auto">
             {stats.map((stat) => (
               <Card
                 key={stat.label}
-                className="testimonial-card p-8 hover:-translate-y-2"
+                className="testimonial-card p-5 md:p-6 hover:-translate-y-1"
               >
-                <p className="text-5xl font-bold text-brand">{stat.number}</p>
-                <p className="text-neutral-text-muted mt-3 font-medium uppercase tracking-wider text-sm">{stat.label}</p>
+                <p className="text-4xl md:text-5xl font-bold text-brand">{stat.number}</p>
+                <p className="text-neutral-text-muted mt-2 md:mt-3 font-medium uppercase tracking-wider text-xs">{stat.label}</p>
               </Card>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="py-20 bg-neutral-surfaceAlt">
-        <div className="container mx-auto">
+      <section className="py-12 md:py-16 bg-neutral-surfaceAlt">
+        <div className="container mx-auto px-4 md:px-6">
           <SectionTitle title="Alumni Network Hub" subtitle="Making a Difference" />
-          <p className="text-center max-w-2xl mx-auto mt-4 text-neutral-text-muted">Meet our successful alumni who are making a difference in the world.</p>
-          <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-8 mt-16">
+          <p className="text-center max-w-2xl mx-auto mt-4 text-neutral-text-muted text-sm">Meet our successful alumni who are making a difference in the world.</p>
+          <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-5 md:gap-6 mt-8 md:mt-10">
             {ALUMNI_MEMBERS.map((person) => (
               <Card
                 key={person.name}
-                className="testimonial-card overflow-hidden p-0 h-full flex flex-col hover:shadow-xl hover:-translate-y-2"
+                className="testimonial-card overflow-hidden p-0 h-full flex flex-col hover:shadow-lg hover:-translate-y-1"
               >
-                <div className="relative h-56">
+                <div className="relative h-48 md:h-52">
                     <Image src={person.image} alt={person.name} fill className="object-cover" data-ai-hint="person" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-                    <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm p-1.5 rounded-full border border-white/20">
-                        <Star className="w-5 h-5 text-accent-yellow" fill="currentColor" />
+                    <div className="absolute top-3 right-3 bg-white/20 backdrop-blur-sm p-1.5 rounded-full border border-white/20">
+                        <Star className="w-4 h-4 text-accent-yellow" fill="currentColor" />
                     </div>
-                    <div className="absolute bottom-0 left-0 p-5">
-                        <h3 className="text-2xl font-bold text-white text-shadow-md">{person.name}</h3>
-                        <p className="text-md font-semibold text-brand">{person.role}</p>
+                    <div className="absolute bottom-0 left-0 p-4">
+                        <h3 className="text-xl md:text-2xl font-bold text-white text-shadow-md">{person.name}</h3>
+                        <p className="text-sm md:text-base font-semibold text-brand">{person.role}</p>
                     </div>
                 </div>
-                <div className="p-6 space-y-4 flex flex-col flex-grow">
-                    <blockquote className="text-neutral-text-muted italic text-sm">
+                <div className="p-4 md:p-5 space-y-3 flex flex-col flex-grow">
+                    <blockquote className="text-neutral-text-muted italic text-xs">
                         "{person.quote}"
                     </blockquote>
-                    <p className="text-foreground/90 text-sm">{person.story}</p>
+                    <p className="text-foreground/90 text-xs">{person.story}</p>
                     
-                    <div className="mt-auto pt-4 space-y-3">
-                        <h4 className="font-semibold text-foreground text-sm">Key Achievements:</h4>
-                        <ul className="space-y-1.5 text-xs text-neutral-text-muted">
+                    <div className="mt-auto pt-3 space-y-2">
+                        <h4 className="font-semibold text-foreground text-xs">Key Achievements:</h4>
+                        <ul className="space-y-1 text-xs text-neutral-text-muted">
                         {person.achievements.map((ach, i) => (
                             <li key={i} className="flex items-start gap-2">
                                 <Sparkles className="w-3 h-3 text-brand mt-0.5 shrink-0" />
@@ -77,20 +77,20 @@ export default function AchievementsView() {
                         ))}
                         </ul>
                     </div>
-                    <div className="flex items-center justify-center gap-4 pt-4 border-t border-neutral-border mt-auto">
+                    <div className="flex items-center justify-center gap-3 pt-3 border-t border-neutral-border mt-auto">
                        {person.socials.linkedin && (
                             <Link href={person.socials.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`View ${person.name} on LinkedIn`} className="text-neutral-text-muted transition-colors hover:text-sky-700">
-                                <Linkedin size={20} />
+                                <Linkedin size={18} />
                             </Link>
                         )}
                         {person.socials.facebook && (
                             <Link href={person.socials.facebook} target="_blank" rel="noopener noreferrer" aria-label={`View ${person.name} on Facebook`} className="text-neutral-text-muted transition-colors hover:text-blue-600">
-                                <Facebook size={20} />
+                                <Facebook size={18} />
                             </Link>
                         )}
                          {person.socials.instagram && (
                             <Link href={person.socials.instagram} target="_blank" rel="noopener noreferrer" aria-label={`View ${person.name} on Instagram`} className="text-neutral-text-muted transition-colors hover:text-pink-500">
-                                <Instagram size={20} />
+                                <Instagram size={18} />
                             </Link>
                         )}
                     </div>
@@ -101,13 +101,13 @@ export default function AchievementsView() {
         </div>
       </section>
 
-      <section className="py-20 w-full">
-        <div className="container mx-auto">
-          <Card className="bg-brand text-primary-foreground rounded-2xl p-12 text-center">
-            <h2 className="text-3xl font-bold">Are You an SARC Alumnus?</h2>
-            <p className="mt-4 max-w-xl mx-auto opacity-90">We'd love to hear your story and feature you in our network. Reconnect with us and inspire the next generation!</p>
-            <div className="mt-8 flex justify-center gap-4">
-              <Button asChild size="lg" variant="secondary" className="h-11 px-6 rounded-xl bg-primary-foreground text-brand">
+      <section className="py-12 md:py-16 w-full">
+        <div className="container mx-auto px-4 md:px-6">
+          <Card className="bg-brand text-primary-foreground rounded-xl p-6 md:p-8 text-center">
+            <h2 className="text-2xl md:text-3xl font-bold">Are You an SARC Alumnus?</h2>
+            <p className="mt-3 md:mt-4 max-w-xl mx-auto opacity-90 text-sm md:text-base">We'd love to hear your story and feature you in our network. Reconnect with us and inspire the next generation!</p>
+            <div className="mt-6 md:mt-8 flex justify-center gap-4">
+              <Button asChild size="lg" variant="secondary" className="h-10 px-5 rounded-lg bg-primary-foreground text-brand">
                 <Link href="/contact">Share Your Story</Link>
               </Button>
             </div>
@@ -115,55 +115,55 @@ export default function AchievementsView() {
         </div>
       </section>
 
-      <section className="py-20 bg-neutral-surfaceAlt">
-        <div className="container mx-auto">
+      <section className="py-12 md:py-16 bg-neutral-surfaceAlt">
+        <div className="container mx-auto px-4 md:px-6">
           <SectionTitle title="Top Students" subtitle="Future Leaders" />
-          <p className="text-center max-w-2xl mx-auto mt-4 text-neutral-text-muted">Celebrating our current students who are excelling in academics and beyond.</p>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mt-16">
+          <p className="text-center max-w-2xl mx-auto mt-4 text-neutral-text-muted text-sm">Celebrating our current students who are excelling in academics and beyond.</p>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 mt-8 md:mt-10">
             {TOP_STUDENTS.map((student, index) => (
               <Card
                 key={student.name}
-                className="testimonial-card overflow-hidden p-0 hover:shadow-xl hover:-translate-y-2"
+                className="testimonial-card overflow-hidden p-0 hover:shadow-lg hover:-translate-y-1"
               >
-                <div className="relative h-48">
+                <div className="relative h-40 md:h-48">
                     <Image src={student.image} alt={student.name} fill className="object-cover" data-ai-hint="student" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
                     <div className="absolute top-3 right-3 bg-white/20 backdrop-blur-sm p-1.5 rounded-full border border-white/20">
-                        <Star className="w-4 h-4 text-accent-yellow" fill="currentColor" />
+                        <Star className="w-3 h-3 text-accent-yellow" fill="currentColor" />
                     </div>
-                    <div className="absolute bottom-0 left-0 p-4">
-                        <h3 className="text-xl font-bold text-white text-shadow-md">{student.name}</h3>
-                        <p className="text-sm text-white/90">{student.class}</p>
+                    <div className="absolute bottom-0 left-0 p-3">
+                        <h3 className="text-base md:text-xl font-bold text-white text-shadow-md">{student.name}</h3>
+                        <p className="text-xs text-white/90">{student.class}</p>
                     </div>
                 </div>
-                <div className="p-6 space-y-4">
-                    <blockquote className="text-neutral-text-muted italic text-center text-sm">
+                <div className="p-4 space-y-3">
+                    <blockquote className="text-neutral-text-muted italic text-center text-xs">
                         "{student.quote}"
                     </blockquote>
-                    <div className="grid grid-cols-1 gap-2 text-sm">
+                    <div className="grid grid-cols-1 gap-2 text-xs">
                         <div className="flex items-center gap-2 p-2 bg-neutral-surface rounded-lg">
-                            <Trophy className="w-4 h-4 text-accent-yellow" />
+                            <Trophy className="w-3 h-3 text-accent-yellow" />
                             <p><span className="font-semibold text-foreground">GPA:</span> {student.gpa.toFixed(2)}</p>
                         </div>
                         <div className="flex items-center gap-2 p-2 bg-neutral-surface rounded-lg">
-                            <BookOpen className="w-4 h-4 text-brand" />
+                            <BookOpen className="w-3 h-3 text-brand" />
                             <p><span className="font-semibold text-foreground">Subjects:</span> {student.subjects}</p>
                         </div>
                     </div>
-                    <div className="flex justify-center gap-4 pt-4 border-t border-neutral-border">
+                    <div className="flex justify-center gap-3 pt-3 border-t border-neutral-border">
                         {student.socials.linkedin && (
                             <Link href={student.socials.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`View ${student.name} on LinkedIn`} className="text-neutral-text-muted transition-colors hover:text-sky-700">
-                                <Linkedin size={20} />
+                                <Linkedin size={18} />
                             </Link>
                         )}
                         {student.socials.facebook && (
                             <Link href={student.socials.facebook} target="_blank" rel="noopener noreferrer" aria-label={`View ${student.name} on Facebook`} className="text-neutral-text-muted transition-colors hover:text-blue-600">
-                                <Facebook size={20} />
+                                <Facebook size={18} />
                             </Link>
                         )}
                         {student.socials.instagram && (
                             <Link href={student.socials.instagram} target="_blank" rel="noopener noreferrer" aria-label={`View ${student.name} on Instagram`} className="text-neutral-text-muted transition-colors hover:text-pink-500">
-                                <Instagram size={20} />
+                                <Instagram size={18} />
                             </Link>
                         )}
                     </div>
@@ -171,22 +171,22 @@ export default function AchievementsView() {
               </Card>
             ))}
           </div>
-          <div className="text-center mt-12">
-            <Button variant="outline" size="lg" className="h-11 px-6 rounded-xl">Meet More Students</Button>
+          <div className="text-center mt-8 md:mt-10">
+            <Button variant="outline" size="lg" className="h-10 px-5 rounded-lg">Meet More Students</Button>
           </div>
         </div>
       </section>
 
-       <section className="py-20 w-full">
-        <div className="container mx-auto">
-          <Card className="bg-brand text-primary-foreground rounded-2xl p-12 text-center">
-            <h2 className="text-3xl font-bold">Join Our Success Story</h2>
-            <p className="mt-4 max-w-xl mx-auto opacity-90">Be part of the next generation of innovators, leaders, and changemakers.</p>
-            <div className="mt-8 flex justify-center gap-4">
-              <Button asChild size="lg" variant="secondary" className="h-11 px-6 rounded-xl bg-primary-foreground text-brand">
+       <section className="py-12 md:py-16 w-full">
+        <div className="container mx-auto px-4 md:px-6">
+          <Card className="bg-brand text-primary-foreground rounded-xl p-6 md:p-8 text-center">
+            <h2 className="text-2xl md:text-3xl font-bold">Join Our Success Story</h2>
+            <p className="mt-3 md:mt-4 max-w-xl mx-auto opacity-90 text-sm md:text-base">Be part of the next generation of innovators, leaders, and changemakers.</p>
+            <div className="mt-6 md:mt-8 flex justify-center gap-3 md:gap-4">
+              <Button asChild size="lg" variant="secondary" className="h-10 px-5 rounded-lg bg-primary-foreground text-brand">
                 <Link href="/admissions">Apply Now</Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="h-11 px-6 rounded-xl border-white/50 text-white hover:bg-white/10 hover:text-white">
+              <Button asChild size="lg" variant="outline" className="h-10 px-5 rounded-lg border-white/50 text-white hover:bg-white/10 hover:text-white">
                 <Link href="/about/us">Learn More</Link>
               </Button>
             </div>

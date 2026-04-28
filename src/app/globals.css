@@ -13,7 +13,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
     
-    --primary: 197 71% 55%; /* Brighter Sky Blue for 'brand' */
+    --primary: 259 74% 63%; /* Purple #7A5AF8 */
     --primary-foreground: 0 0% 100%;
     
     --secondary: 210 40% 96.1%;
@@ -22,7 +22,7 @@
     --muted: 210 40% 96.1%;
     --muted-foreground: 240 3.8% 46.1%;
     
-    --accent: 0 71% 65%; /* Softer Red for 'accent' */
+    --accent: 346 88% 58%; /* Red/Pink #E31B54 */
     --accent-foreground: 0 0% 98%;
 
     --destructive: 0 84.2% 60.2%;
@@ -34,18 +34,20 @@
     
     --radius: 0.75rem;
 
-    /* Custom colors for SkillForge-like theme */
-    --brand: hsl(197, 71%, 55%);
-    --brand-light: hsla(197, 71%, 55%, 0.1);
+    /* Custom colors from Flux Academy reference */
+    --brand: hsl(259, 74%, 63%); /* Purple #7A5AF8 */
+    --brand-light: hsla(259, 74%, 63%, 0.1);
+    --accent-red: hsl(346, 88%, 58%); /* Red/Pink #E31B54 */
+    --accent-green: hsl(152, 84%, 40%); /* Green #12B76A */
+    --accent-yellow: hsl(38, 98%, 54%); /* Yellow #FDB022 */
+    --accent-pink: hsl(346, 76%, 71%); /* Pink #FD6F8E */
+    --accent-lightgreen: hsl(82, 71%, 57%); /* Light Green #ADDB41 */
     --neutral-bg: hsl(0, 0%, 100%);
     --neutral-surface: hsl(0, 0%, 97%);
     --neutral-surfaceAlt: hsl(30, 20%, 96%);
     --neutral-border: rgba(0, 0, 0, 0.1);
     --neutral-text: hsl(0, 0%, 0%);
     --neutral-text-muted: hsl(0, 0%, 13%);
-    --accent-peach: hsl(30, 93%, 84%);
-    --accent-green: hsl(106, 73%, 80%);
-    --accent-yellow: hsl(45, 96%, 67%);
   }
 
   .dark {
@@ -58,7 +60,7 @@
     --popover: 225 30% 10%;
     --popover-foreground: 225 20% 95%;
 
-    --primary: 200 80% 55%;
+    --primary: 259 74% 63%;
     --primary-foreground: 225 30% 8%;
 
     --secondary: 225 30% 15%;
@@ -67,7 +69,7 @@
     --muted: 225 30% 15%;
     --muted-foreground: 225 10% 65%;
     
-    --accent: 340 80% 55%;
+    --accent: 346 88% 58%;
     --accent-foreground: 225 30% 8%;
     
     --destructive: 0 70% 50%;
@@ -77,17 +79,19 @@
     --input: 225 30% 18%;
     --ring: 200 80% 55%;
 
-    --brand: hsl(200, 80%, 55%);
-    --brand-light: hsla(200, 80%, 55%, 0.12);
+    --brand: hsl(259, 74%, 63%);
+    --brand-light: hsla(259, 74%, 63%, 0.12);
+    --accent-red: hsl(346, 88%, 58%);
+    --accent-green: hsl(152, 84%, 40%);
+    --accent-yellow: hsl(38, 98%, 54%);
+    --accent-pink: hsl(346, 76%, 71%);
+    --accent-lightgreen: hsl(82, 71%, 57%);
     --neutral-bg: hsl(225, 30%, 8%);
     --neutral-surface: hsl(225, 30%, 12%);
     --neutral-surfaceAlt: hsl(225, 30%, 10%);
     --neutral-border: rgba(255, 255, 255, 0.08);
     --neutral-text: hsl(225, 20%, 95%);
     --neutral-text-muted: hsl(225, 10%, 65%);
-    --accent-peach: hsl(25, 80%, 60%);
-    --accent-green: hsl(150, 70%, 50%);
-    --accent-yellow: hsl(45, 90%, 55%);
   }
 }
 
@@ -97,7 +101,7 @@
   }
   body {
     @apply bg-neutral-bg text-neutral-text font-sans antialiased;
-    font-family: var(--font-inter-tight), sans-serif;
+    font-family: var(--font-geist), sans-serif;
   }
   .dg-scroll-lock,
   .lightbox-open {

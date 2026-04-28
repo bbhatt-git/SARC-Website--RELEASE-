@@ -175,7 +175,7 @@ export default function AdmissionsView() {
     return (
         <div>
             <PageHeader title="Admissions" subtitle="Begin Your Journey at SARC" />
-            <div className="container mx-auto px-4 max-w-4xl py-20">
+            <div className="container mx-auto px-4 md:px-6 max-w-4xl py-12 md:py-16">
                 {!state.success ? (
                     <form ref={formRef} onSubmit={handleSubmit} className="space-y-8">
                         {/* Personal Information */}

@@ -68,42 +68,42 @@ export default function FacilitiesView() {
     return (
         <div>
             <PageHeader title="Facilities & Innovation" subtitle="World-Class Infrastructure & Practical Learning" />
-            <div className="py-20 space-y-24">
-                <section className="container mx-auto px-4">
+            <div className="py-12 md:py-16 space-y-16 md:space-y-20">
+                <section className="container mx-auto px-4 md:px-6">
                     <SectionTitle title="Our Facilities" subtitle="Supporting Your Success" />
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-16">
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 mt-8 md:mt-10">
                         {facilities.map((facility) => (
                             <div
                                 key={facility.title}
-                                className="testimonial-card p-8 flex flex-col items-center text-center gap-4 h-full hover:-translate-y-2"
+                                className="testimonial-card p-5 md:p-6 flex flex-col items-center text-center gap-3 h-full hover:-translate-y-1"
                             >
-                                <div className="bg-primary/10 p-4 rounded-full border border-primary/20">
-                                    <facility.icon className="w-8 h-8 text-primary" />
+                                <div className="bg-brand/10 p-3 rounded-full border border-brand/20">
+                                    <facility.icon className="w-7 h-7 text-brand" />
                                 </div>
                                 <div>
-                                    <h3 className="text-xl font-bold text-foreground mb-2">{facility.title}</h3>
-                                    <p className="text-muted-foreground">{facility.description}</p>
+                                    <h3 className="text-lg font-bold text-foreground mb-2">{facility.title}</h3>
+                                    <p className="text-muted-foreground text-sm">{facility.description}</p>
                                 </div>
                             </div>
                         ))}
                     </div>
                 </section>
 
-                <section className="bg-neutral-surface py-24">
-                    <div className="container mx-auto px-4 max-w-6xl">
+                <section className="bg-neutral-surface py-12 md:py-16">
+                    <div className="container mx-auto px-4 md:px-6 max-w-6xl">
                         <SectionTitle title="Hands-On Innovation" subtitle="Real projects solving real problems" />
-                        <div className="grid md:grid-cols-2 gap-8 mt-16">
+                        <div className="grid md:grid-cols-2 gap-5 md:gap-6 mt-8 md:mt-10">
                             {innovationProjects.map((project) => (
                                 <div
                                     key={project.title}
-                                    className="testimonial-card p-8 flex items-start gap-6 h-full hover:-translate-y-2"
+                                    className="testimonial-card p-5 md:p-6 flex items-start gap-4 h-full hover:-translate-y-1"
                                 >
-                                    <div className="bg-primary/10 p-4 rounded-full border border-primary/20">
-                                        <project.icon className="w-8 h-8 text-primary" />
+                                    <div className="bg-brand/10 p-3 rounded-full border border-brand/20">
+                                        <project.icon className="w-7 h-7 text-brand" />
                                     </div>
                                     <div>
-                                        <h3 className="text-2xl font-bold text-foreground mb-2">{project.title}</h3>
-                                        <p className="text-muted-foreground text-lg">{project.description}</p>
+                                        <h3 className="text-lg md:text-xl font-bold text-foreground mb-2">{project.title}</h3>
+                                        <p className="text-muted-foreground text-sm md:text-base">{project.description}</p>
                                     </div>
                                 </div>
                             ))}
@@ -111,20 +111,20 @@ export default function FacilitiesView() {
                     </div>
                 </section>
 
-                <section className="container mx-auto px-4 max-w-6xl">
+                <section className="container mx-auto px-4 md:px-6 max-w-6xl">
                     <SectionTitle title="Educational Tours & Visits" subtitle="Learning beyond the campus" />
-                     <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mt-16">
+                     <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 mt-8 md:mt-10">
                         {educationalTours.map((tour) => (
                             <div
                                 key={tour.title}
-                                className="testimonial-card p-6 flex flex-col items-center text-center gap-4 h-full hover:-translate-y-2"
+                                className="testimonial-card p-4 md:p-5 flex flex-col items-center text-center gap-3 h-full hover:-translate-y-1"
                             >
-                                <div className="bg-sky-100 dark:bg-sky-900/50 p-4 rounded-full border border-sky-200">
-                                    <tour.icon className="w-8 h-8 text-sky-600 dark:text-sky-400" />
+                                <div className="bg-brand/10 p-3 rounded-full border border-brand/20">
+                                    <tour.icon className="w-7 h-7 text-brand" />
                                 </div>
                                 <div>
-                                    <h3 className="text-xl font-bold text-foreground mb-2">{tour.title}</h3>
-                                    <p className="text-muted-foreground">{tour.description}</p>
+                                    <h3 className="text-base md:text-lg font-bold text-foreground mb-2">{tour.title}</h3>
+                                    <p className="text-muted-foreground text-sm">{tour.description}</p>
                                 </div>
                             </div>
                         ))}

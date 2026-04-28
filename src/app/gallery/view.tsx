@@ -133,32 +133,32 @@ export default function GalleryView() {
                 )}
             </AnimatePresence>
             
-            <div className="py-20 space-y-28">
+            <div className="py-12 md:py-16 space-y-16 md:space-y-20">
 
                 {/* Section 1: Explore by Category */}
-                <section className="container mx-auto px-4">
+                <section className="container mx-auto px-4 md:px-6">
                     <SectionTitle
                         title="Discover by Category"
                         subtitle="Explore Our World"
-                        className="mb-12"
+                        className="mb-8 md:mb-10"
                     />
-                    <div className="flex justify-center flex-wrap gap-2 mb-12">
+                    <div className="flex justify-center flex-wrap gap-2 mb-8 md:mb-10">
                         {GALLERY_CATEGORIES.map(category => (
                             <Button
                                 key={category}
                                 variant={activeCategory === category ? 'default' : 'outline'}
                                 onClick={() => setActiveCategory(category)}
-                                className="rounded-full"
+                                className="rounded-full text-sm"
                             >
                                 {category}
                             </Button>
                         ))}
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
                         {filteredImages.map(image => (
                              <div key={image.src} className="testimonial-card group overflow-hidden">
-                                <div className="relative h-56">
+                                <div className="relative h-48 md:h-52">
                                      <Image
                                         src={image.src}
                                         alt={image.title}
@@ -167,9 +167,9 @@ export default function GalleryView() {
                                         data-ai-hint={image.hint}
                                     />
                                 </div>
-                                <div className="p-4">
-                                    <h3 className="font-bold text-foreground truncate">{image.title}</h3>
-                                    <p className="text-sm text-muted-foreground">{image.category}</p>
+                                <div className="p-3">
+                                    <h3 className="font-bold text-foreground text-sm truncate">{image.title}</h3>
+                                    <p className="text-xs text-muted-foreground">{image.category}</p>
                                 </div>
                             </div>
                         ))}
@@ -177,16 +177,16 @@ export default function GalleryView() {
                 </section>
 
                 {/* Section 3: Coming Soon */}
-                <section className="container mx-auto px-4">
-                     <div className="testimonial-card p-12 text-center relative overflow-hidden flex flex-col items-center">
-                        <div className="bg-brand-light p-4 rounded-full mb-6 border border-brand/20">
-                             <Camera className="w-10 h-10 text-brand" />
+                <section className="container mx-auto px-4 md:px-6">
+                     <div className="testimonial-card p-6 md:p-8 text-center relative overflow-hidden flex flex-col items-center">
+                        <div className="bg-brand-light p-3 rounded-full mb-4 border border-brand/20">
+                             <Camera className="w-8 h-8 text-brand" />
                         </div>
-                        <h2 className="text-3xl font-bold text-foreground mb-4 relative">More Photos Coming Soon!</h2>
-                        <p className="text-lg text-neutral-text-muted max-w-3xl mx-auto leading-relaxed relative">
+                        <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-3 md:mb-4 relative">More Photos Coming Soon!</h2>
+                        <p className="text-sm md:text-base text-neutral-text-muted max-w-3xl mx-auto leading-relaxed relative">
                            We're continuously updating our gallery with new photos showcasing student projects, campus life, educational tours, and innovation labs. Check back soon for more!
                         </p>
-                        <Button className="mt-8" onClick={() => setSocialModalOpen(true)}>
+                        <Button className="mt-6 md:mt-8" onClick={() => setSocialModalOpen(true)}>
                             <Share2 className="mr-2 h-4 w-4" />
                             Follow Us on Social Media
                         </Button>

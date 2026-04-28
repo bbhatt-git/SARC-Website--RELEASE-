@@ -29,15 +29,15 @@ type State = {
 };
 
 const InfoCard = ({ icon: Icon, title, text, href }: { icon: React.ElementType, title: string, text: string, href?: string }) => (
-    <div className="testimonial-card text-center p-8 hover:-translate-y-1 hover:shadow-xl">
-        <div className="inline-block bg-brand-light text-brand p-4 rounded-full mb-4">
-            <Icon className="w-8 h-8" />
+    <div className="testimonial-card text-center p-5 md:p-6 hover:-translate-y-1 hover:shadow-lg">
+        <div className="inline-block bg-brand-light text-brand p-3 rounded-full mb-3">
+            <Icon className="w-7 h-7" />
         </div>
-        <h3 className="text-xl font-bold text-foreground mb-2">{title}</h3>
+        <h3 className="text-lg font-bold text-foreground mb-2">{title}</h3>
         {href ? (
-             <a href={href} className="text-neutral-text-muted hover:text-brand transition-colors">{text}</a>
+             <a href={href} className="text-neutral-text-muted hover:text-brand transition-colors text-sm">{text}</a>
         ) : (
-            <p className="text-neutral-text-muted">{text}</p>
+            <p className="text-neutral-text-muted text-sm">{text}</p>
         )}
     </div>
 );
@@ -86,8 +86,8 @@ export default function ContactView() {
         <div>
             <PageHeader title="Get In Touch" subtitle="We're here to help" />
 
-            <section className="py-20">
-                <div className="container grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <section className="py-12 md:py-16">
+                <div className="container px-4 md:px-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                      <InfoCard icon={MapPin} title="Address" text="Bhimdatta-06, Mahendranagar, Kanchanpur, Nepal" />
                      <InfoCard icon={Phone} title="Phone" text="099-525271" href="tel:099525271"/>
                      <InfoCard icon={Mail} title="Email" text="contact@sarc.edu.np" href="mailto:contact@sarc.edu.np"/>
@@ -95,14 +95,14 @@ export default function ContactView() {
                 </div>
             </section>
 
-            <section className="container pb-20">
-                 <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <section className="container px-4 md:px-6 pb-12 md:pb-16">
+                 <div className="grid lg:grid-cols-2 gap-6 md:gap-8 items-start">
                     <Card className="testimonial-card">
-                        <CardHeader>
+                        <CardHeader className="p-5 md:p-6">
                             <CardTitle>Send Us a Message</CardTitle>
                             <CardDescription>Have a question or feedback? Drop us a line.</CardDescription>
                         </CardHeader>
-                        <CardContent>
+                        <CardContent className="p-5 md:p-6">
                             {state.success ? (
                                 <Alert variant="default" className="bg-emerald-50 border-emerald-200 text-emerald-800 dark:bg-emerald-900/30 dark:border-emerald-500/30 dark:text-emerald-200">
                                     <CheckCircle className="h-4 w-4 !text-emerald-600 dark:!text-emerald-400" />
@@ -144,12 +144,12 @@ export default function ContactView() {
                         </CardContent>
                     </Card>
 
-                     <div className="testimonial-card p-2 relative h-[550px] lg:h-full mt-8 lg:mt-0">
+                     <div className="testimonial-card p-2 relative h-[450px] md:h-[550px] lg:h-full mt-6 md:mt-0">
                         <iframe
                             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3499.851991823293!2d80.1753244743224!3d28.69376667562916!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39a1ab1492806743%3A0x24a0f71e59229306!2sSARC%20EDUCATION%20FOUNDATION-Best%20in%20School%2Fcollege%20in%20Kanchanpur%2C%20Mahendranagar!5e0!3m2!1sen!2snp!4v1669888812613!5m2!1sen!2snp"
                             width="100%"
                             height="100%"
-                            className='rounded-xl'
+                            className='rounded-lg'
                             style={{ border: 0 }}
                             allowFullScreen={false}
                             loading="lazy"
@@ -160,17 +160,17 @@ export default function ContactView() {
                 </div>
             </section>
             
-            <section className="pb-20">
-                <div className="container">
-                    <div className="bg-brand text-primary-foreground rounded-2xl p-12 text-center flex flex-col items-center">
-                        <div className="bg-white/10 p-4 rounded-full mb-6">
-                            <MapPin className="w-8 h-8"/>
+            <section className="pb-12 md:pb-16">
+                <div className="container px-4 md:px-6">
+                    <div className="bg-brand text-primary-foreground rounded-xl p-6 md:p-8 text-center flex flex-col items-center">
+                        <div className="bg-white/10 p-3 rounded-full mb-4">
+                            <MapPin className="w-7 h-7"/>
                         </div>
-                        <h2 className="text-3xl font-bold">Schedule a Campus Visit</h2>
-                        <p className="mt-2 max-w-2xl mx-auto opacity-90">
+                        <h2 className="text-2xl md:text-3xl font-bold">Schedule a Campus Visit</h2>
+                        <p className="mt-2 max-w-2xl mx-auto opacity-90 text-sm md:text-base">
                            Experience SARC firsthand. Tour our facilities, meet our faculty, and see innovation in action.
                         </p>
-                        <Button asChild variant="secondary" className="mt-8 bg-white text-brand hover:bg-white/90 rounded-full">
+                        <Button asChild variant="secondary" className="mt-6 md:mt-8 bg-white text-brand hover:bg-white/90 rounded-full">
                             <Link href="/admissions">Book Your Visit</Link>
                         </Button>
                     </div>

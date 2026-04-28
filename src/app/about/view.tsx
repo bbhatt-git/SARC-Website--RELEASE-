@@ -11,7 +11,7 @@ export default function AboutView() {
     <div>
       <PageHeader title="About" subtitle="Discover SARC Education Foundation" />
       
-      <div className="container mx-auto px-4 py-12 max-w-6xl">
+      <div className="container mx-auto px-4 md:px-6 py-8 md:py-12 max-w-6xl">
         <Tabs defaultValue="us" className="w-full">
           <TabsList className="grid w-full grid-cols-3 max-w-2xl mx-auto mb-12">
             <TabsTrigger value="us">About Us</TabsTrigger>

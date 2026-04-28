@@ -5,15 +5,14 @@ import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 import Header from '@/app/components/header';
 import Footer from '@/app/components/footer';
-import { Inter_Tight } from 'next/font/google';
+import { Geist } from 'next/font/google';
 import { ThemeProvider } from './components/theme-provider';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import GSAPProvider from './components/GSAPProvider';
 
-const interTight = Inter_Tight({
+const geist = Geist({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'],
-  variable: '--font-inter-tight',
+  variable: '--font-geist',
   display: 'swap',
 });
 
@@ -110,7 +109,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn(interTight.variable)} suppressHydrationWarning>
+    <html lang="en" className={cn(geist.variable)} suppressHydrationWarning>
       <body id="app-root" className="min-h-screen flex flex-col w-full relative overflow-x-hidden">
         <script
           type="application/ld+json"
