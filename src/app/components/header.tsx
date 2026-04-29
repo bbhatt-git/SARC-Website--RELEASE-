@@ -78,9 +78,10 @@ export default function Header() {
     return null;
   }
 
-  const SearchBar = () => {
+  const SearchBar = ({ className, isMobile = false }: { className?: string, isMobile?: boolean }) => {
     const router = useRouter();
     const [searchQuery, setSearchQuery] = useState('');
+    const [isFocused, setIsFocused] = useState(false);
 
     const handleSearch = (e: React.FormEvent) => {
       e.preventDefault();
@@ -90,16 +91,21 @@ export default function Header() {
     };
 
     return (
-      <form onSubmit={handleSearch} className="relative w-full">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+      <motion.form 
+        onSubmit={handleSearch} 
+        className={cn("relative flex items-center", isMobile ? "w-full" : "w-[140px]", className)}
+      >
+        <Search className="absolute left-3 h-4 w-4 text-muted-foreground z-10" />
         <Input
           type="search"
-          placeholder="Search..."
-          className="pl-9"
+          placeholder="Search"
+          className="pl-9 pr-4 h-9 bg-neutral-surface/50 border-neutral-border/50 focus:bg-neutral-surface focus-visible:ring-1 focus-visible:ring-brand/30 transition-all rounded-full text-sm"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
         />
-      </form>
+      </motion.form>
     );
   };
 
@@ -136,7 +142,7 @@ export default function Header() {
 
         {/* Desktop Navigation */}
         <NavigationMenu className="hidden lg:flex">
-          <NavigationMenuList>
+          <NavigationMenuList className="gap-6">
             {NAV_LINKS.map((link, index) => (
               <motion.div
                 key={link.label}
@@ -185,7 +191,7 @@ export default function Header() {
           transition={{ delay: 0.2 }}
           className="flex items-center gap-3"
         >
-          <div className="hidden lg:block w-48">
+          <div className="hidden lg:block">
             <SearchBar />
           </div>
           <ModeToggle />
@@ -230,7 +236,7 @@ export default function Header() {
                 </SheetHeader>
 
                 <div className="p-4 border-b border-neutral-border">
-                  <SearchBar />
+                  <SearchBar isMobile={true} className="w-full" />
                 </div>
                 <nav className="flex-1 overflow-y-auto px-4 py-6">
                   <Accordion type="single" collapsible className="w-full space-y-1">

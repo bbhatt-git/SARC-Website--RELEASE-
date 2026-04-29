@@ -4,34 +4,54 @@ import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Lenis from 'lenis';
+import { Observer } from 'gsap/Observer';
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, Observer);
 
 export default function GSAPProvider() {
   const pathname = usePathname();
 
   useEffect(() => {
-    // Smooth scroll with Lenis
-    const lenisInstance = new Lenis({
-      duration: 1.2,
-      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    });
+    if (typeof window === 'undefined') return;
 
-    function raf(time: number) {
-      lenisInstance.raf(time);
-      requestAnimationFrame(raf);
+    const isMobile = window.innerWidth < 1024;
+    let obs: any = null;
+    let tickerUpdate: any = null;
+
+    if (!isMobile) {
+      let targetY = window.scrollY;
+      let currentY = window.scrollY;
+      const lerp = 0.01; 
+      const speed = 0.3; 
+
+      obs = Observer.create({
+        target: window,
+        type: "wheel,touch,pointer",
+        preventDefault: true,
+        onChange: (self) => {
+          targetY += self.deltaY * speed;
+          const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+          targetY = Math.max(0, Math.min(targetY, maxScroll));
+        }
+      });
+
+      tickerUpdate = () => {
+        currentY += (targetY - currentY) * lerp;
+        window.scrollTo(0, currentY);
+        ScrollTrigger.update();
+      };
+
+      gsap.ticker.add(tickerUpdate);
     }
-    requestAnimationFrame(raf);
 
-    // GSAP ScrollTrigger animations
+    // Initial animations run
     const animateElements = () => {
-      // Kill existing triggers to avoid duplicates on route change
       ScrollTrigger.getAll().forEach(t => t.kill());
 
+      // (Rest of your animation code)
       // Fade up animations
       gsap.utils.toArray('[data-gsap-fade-up]').forEach((element: any) => {
-        gsap.fromTo(element, 
+        gsap.fromTo(element,
           { opacity: 0, y: 50 },
           {
             opacity: 1, y: 0,
@@ -118,7 +138,7 @@ export default function GSAPProvider() {
       gsap.utils.toArray('[data-gsap-text-reveal]').forEach((element: any) => {
         const text = element.innerText;
         element.innerHTML = text.split(' ').map((word: string) => `<span class="inline-block overflow-hidden"><span class="inline-block">${word}</span></span>`).join(' ');
-        
+
         const spans = element.querySelectorAll('span > span');
         gsap.fromTo(spans,
           { y: '100%' },
@@ -136,17 +156,49 @@ export default function GSAPProvider() {
         );
       });
 
+      // Premier Program Cards 3D Flip
+      const programCards = gsap.utils.toArray('.program-card-3d');
+      if (programCards.length > 0) {
+        gsap.from(programCards, {
+          rotateY: 90,
+          opacity: 0,
+          scale: 0.8,
+          z: -500,
+          stagger: 0.2,
+          scrollTrigger: {
+            trigger: '#exams',
+            start: 'top 85%',
+            end: 'top 20%',
+            scrub: 2,
+          }
+        });
+
+        gsap.to(programCards, {
+          rotateY: -90,
+          opacity: 0,
+          scale: 0.8,
+          z: -300,
+          stagger: 0.1,
+          scrollTrigger: {
+            trigger: '#exams',
+            start: 'bottom 85%',
+            end: 'bottom 15%',
+            scrub: 1.5,
+          }
+        });
+      }
+
       ScrollTrigger.refresh();
     };
 
-    // Initial run and refresh
-    setTimeout(animateElements, 100);
+    setTimeout(animateElements, 500);
 
     return () => {
-      lenisInstance.destroy();
+      if (obs) obs.kill();
+      if (tickerUpdate) gsap.ticker.remove(tickerUpdate);
       ScrollTrigger.getAll().forEach(t => t.kill());
     };
-  }, [pathname]); // RE-RUN ON PATHNAME CHANGE
+  }, [pathname]);
 
   return null;
 }

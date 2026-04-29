@@ -10,6 +10,10 @@ import { StaggerTestimonials } from '@/components/ui/stagger-testimonials';
 import { Marquee } from '@/app/components/marquee';
 import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 // Based on the SkillForge UI the user liked.
 
@@ -174,49 +178,53 @@ const FeatureCardsSection = () => {
     const getPoints = (delay: number) => [0.1 + delay, 0.35 + delay, 0.55 - delay, 0.85 - delay];
     const getOpacityPoints = (delay: number) => [0.1 + delay, 0.3 + delay, 0.6 - delay, 0.85 - delay];
 
-    // Individual Transforms for each card
+    // Individual Transforms for each card - OPTIMIZED FOR MOBILE 'TILT-IN'
     // 1. Robotics Lab (Top Left 1)
     const card1_points = getPoints(0);
-    const card1_x = useTransform(smoothProgress, card1_points, [isMobile ? -30 : -200, 0, 0, isMobile ? -30 : -200]);
+    const card1_x = useTransform(smoothProgress, card1_points, [isMobile ? 0 : -200, 0, 0, isMobile ? 0 : -200]);
+    const card1_y = useTransform(smoothProgress, card1_points, [isMobile ? 120 : 0, 0, 0, isMobile ? 120 : 0]);
     const card1_opacity = useTransform(smoothProgress, getOpacityPoints(0), [0, 1, 1, 0]);
-    const card1_scale = useTransform(smoothProgress, card1_points, [isMobile ? 1.1 : 1.4, 1, 1, isMobile ? 1.1 : 1.4]);
-    const card1_rotate = useTransform(smoothProgress, card1_points, [isMobile ? -4 : -12, 0, 0, isMobile ? 4 : 12]);
+    const card1_scale = useTransform(smoothProgress, card1_points, [isMobile ? 0.85 : 1.4, 1, 1, isMobile ? 0.85 : 1.4]);
+    const card1_rotate = useTransform(smoothProgress, card1_points, [isMobile ? 15 : -12, 0, 0, isMobile ? -15 : 12]);
 
     // 2. Science Lab (Top Left 2)
     const card2_points = getPoints(0.04);
-    const card2_x = useTransform(smoothProgress, card2_points, [isMobile ? -40 : -250, 0, 0, isMobile ? -40 : -250]);
+    const card2_x = useTransform(smoothProgress, card2_points, [isMobile ? 0 : -250, 0, 0, isMobile ? 0 : -250]);
+    const card2_y = useTransform(smoothProgress, card2_points, [isMobile ? 140 : 0, 0, 0, isMobile ? 140 : 0]);
     const card2_opacity = useTransform(smoothProgress, getOpacityPoints(0.04), [0, 1, 1, 0]);
-    const card2_scale = useTransform(smoothProgress, card2_points, [isMobile ? 1.12 : 1.45, 1, 1, isMobile ? 1.12 : 1.45]);
-    const card2_rotate = useTransform(smoothProgress, card2_points, [isMobile ? -6 : -15, 0, 0, isMobile ? 6 : 15]);
+    const card2_scale = useTransform(smoothProgress, card2_points, [isMobile ? 0.86 : 1.45, 1, 1, isMobile ? 0.86 : 1.45]);
+    const card2_rotate = useTransform(smoothProgress, card2_points, [isMobile ? 18 : -15, 0, 0, isMobile ? -18 : 15]);
 
     // 3. Success Rate (Bottom Left)
     const card3_points = getPoints(0.08);
-    const card3_x = useTransform(smoothProgress, card3_points, [isMobile ? -50 : -300, 0, 0, isMobile ? -50 : -300]);
-    const card3_y = useTransform(smoothProgress, card3_points, [isMobile ? 60 : 180, 0, 0, isMobile ? 60 : 180]);
+    const card3_x = useTransform(smoothProgress, card3_points, [isMobile ? 0 : -300, 0, 0, isMobile ? 0 : -300]);
+    const card3_y = useTransform(smoothProgress, card3_points, [isMobile ? 160 : 180, 0, 0, isMobile ? 160 : 180]);
     const card3_opacity = useTransform(smoothProgress, getOpacityPoints(0.08), [0, 1, 1, 0]);
-    const card3_scale = useTransform(smoothProgress, card3_points, [isMobile ? 1.15 : 1.5, 1, 1, isMobile ? 1.15 : 1.5]);
-    const card3_rotate = useTransform(smoothProgress, card3_points, [isMobile ? -8 : -18, 0, 0, isMobile ? 8 : 18]);
+    const card3_scale = useTransform(smoothProgress, card3_points, [isMobile ? 0.87 : 1.5, 1, 1, isMobile ? 0.87 : 1.5]);
+    const card3_rotate = useTransform(smoothProgress, card3_points, [isMobile ? 20 : -18, 0, 0, isMobile ? -20 : 18]);
 
     // 4. Interactive Session (Center)
     const card4_points = getPoints(0.06);
-    const card4_y = useTransform(smoothProgress, card4_points, [isMobile ? 80 : 250, 0, 0, isMobile ? 80 : 250]);
+    const card4_y = useTransform(smoothProgress, card4_points, [isMobile ? 180 : 250, 0, 0, isMobile ? 180 : 250]);
     const card4_opacity = useTransform(smoothProgress, getOpacityPoints(0.06), [0, 1, 1, 0]);
-    const card4_scale = useTransform(smoothProgress, card4_points, [isMobile ? 1.1 : 1.4, 1, 1, isMobile ? 1.1 : 1.4]);
+    const card4_scale = useTransform(smoothProgress, card4_points, [isMobile ? 0.85 : 1.4, 1, 1, isMobile ? 0.85 : 1.4]);
+    const card4_rotate = useTransform(smoothProgress, card4_points, [isMobile ? 10 : 0, 0, 0, isMobile ? -10 : 0]);
 
     // 5. Academic Programs (Top Right)
     const card5_points = getPoints(0.02);
-    const card5_x = useTransform(smoothProgress, card5_points, [isMobile ? 40 : 250, 0, 0, isMobile ? 40 : 250]);
+    const card5_x = useTransform(smoothProgress, card5_points, [isMobile ? 0 : 250, 0, 0, isMobile ? 0 : 250]);
+    const card5_y = useTransform(smoothProgress, card5_points, [isMobile ? 140 : 0, 0, 0, isMobile ? 140 : 0]);
     const card5_opacity = useTransform(smoothProgress, getOpacityPoints(0.02), [0, 1, 1, 0]);
-    const card5_scale = useTransform(smoothProgress, card5_points, [isMobile ? 1.12 : 1.4, 1, 1, isMobile ? 1.12 : 1.4]);
-    const card5_rotate = useTransform(smoothProgress, card5_points, [isMobile ? 6 : 15, 0, 0, isMobile ? -6 : -15]);
+    const card5_scale = useTransform(smoothProgress, card5_points, [isMobile ? 0.86 : 1.4, 1, 1, isMobile ? 0.86 : 1.4]);
+    const card5_rotate = useTransform(smoothProgress, card5_points, [isMobile ? 15 : 15, 0, 0, isMobile ? -15 : -15]);
 
     // 6. Resource Library (Bottom Right)
     const card6_points = getPoints(0.08);
-    const card6_x = useTransform(smoothProgress, card6_points, [isMobile ? 50 : 300, 0, 0, isMobile ? 50 : 300]);
-    const card6_y = useTransform(smoothProgress, card6_points, [isMobile ? 70 : 200, 0, 0, isMobile ? 70 : 200]);
+    const card6_x = useTransform(smoothProgress, card6_points, [isMobile ? 0 : 300, 0, 0, isMobile ? 0 : 300]);
+    const card6_y = useTransform(smoothProgress, card6_points, [isMobile ? 160 : 200, 0, 0, isMobile ? 160 : 200]);
     const card6_opacity = useTransform(smoothProgress, getOpacityPoints(0.08), [0, 1, 1, 0]);
-    const card6_scale = useTransform(smoothProgress, card6_points, [isMobile ? 1.15 : 1.5, 1, 1, isMobile ? 1.15 : 1.5]);
-    const card6_rotate = useTransform(smoothProgress, card6_points, [isMobile ? 8 : 18, 0, 0, isMobile ? -8 : -18]);
+    const card6_scale = useTransform(smoothProgress, card6_points, [isMobile ? 0.87 : 1.5, 1, 1, isMobile ? 0.87 : 1.5]);
+    const card6_rotate = useTransform(smoothProgress, card6_points, [isMobile ? 18 : 18, 0, 0, isMobile ? -18 : -18]);
 
     return (
         <section ref={containerRef} className="py-20 md:py-40 bg-[#f9fafb] dark:bg-neutral-bg overflow-hidden relative -mt-1">
@@ -227,16 +235,37 @@ const FeatureCardsSection = () => {
                     <div className="flex flex-col gap-4 h-full">
                         {/* Top Image Cards - Individual Animations */}
                         <div className="grid grid-cols-2 gap-4 h-[200px]">
-                            <motion.div style={{ x: card1_x, opacity: card1_opacity, scale: card1_scale, rotate: card1_rotate }} className="relative rounded-2xl overflow-hidden group bg-card border border-border shadow-lg">
+                            <motion.div 
+                                style={!isMobile ? { x: card1_x, y: card1_y, opacity: card1_opacity, scale: card1_scale, rotate: card1_rotate } : {}}
+                                initial={isMobile ? { opacity: 0, y: 50, scale: 0.9, rotate: -5 } : {}}
+                                whileInView={isMobile ? { opacity: 1, y: 0, scale: 1, rotate: 0 } : {}}
+                                viewport={{ once: false, margin: "-50px" }}
+                                transition={{ duration: 0.8, ease: "easeOut" }}
+                                className="relative rounded-2xl overflow-hidden group bg-card border border-border shadow-lg"
+                            >
                                 <Image src={imageData.gallery[16].src} alt="Robotics lab" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" fill data-ai-hint={imageData.gallery[16].hint} />
                             </motion.div>
-                            <motion.div style={{ x: card2_x, opacity: card2_opacity, scale: card2_scale, rotate: card2_rotate }} className="relative rounded-2xl overflow-hidden group bg-card border border-border shadow-lg">
+                            <motion.div 
+                                style={!isMobile ? { x: card2_x, y: card2_y, opacity: card2_opacity, scale: card2_scale, rotate: card2_rotate } : {}}
+                                initial={isMobile ? { opacity: 0, y: 50, scale: 0.9, rotate: 5 } : {}}
+                                whileInView={isMobile ? { opacity: 1, y: 0, scale: 1, rotate: 0 } : {}}
+                                viewport={{ once: false, margin: "-50px" }}
+                                transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
+                                className="relative rounded-2xl overflow-hidden group bg-card border border-border shadow-lg"
+                            >
                                 <Image src={imageData.gallery[20].src} alt="Science lab" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" fill data-ai-hint={imageData.gallery[20].hint} />
                             </motion.div>
                         </div>
 
                         {/* Success Rate Card - Come from left bottom staggered */}
-                        <motion.div style={{ x: card3_x, y: card3_y, opacity: card3_opacity, scale: card3_scale, rotate: card3_rotate }} className="bg-white dark:bg-neutral-surface rounded-2xl p-6 flex flex-col justify-between flex-grow border border-accent-pink/30 shadow-xl relative overflow-hidden text-left">
+                        <motion.div 
+                            style={!isMobile ? { x: card3_x, y: card3_y, opacity: card3_opacity, scale: card3_scale, rotate: card3_rotate } : {}}
+                            initial={isMobile ? { opacity: 0, y: 60, scale: 0.95 } : {}}
+                            whileInView={isMobile ? { opacity: 1, y: 0, scale: 1 } : {}}
+                            viewport={{ once: false, margin: "-50px" }}
+                            transition={{ duration: 0.8, ease: "easeOut" }}
+                            className="bg-white dark:bg-neutral-surface rounded-2xl p-6 flex flex-col justify-between flex-grow border border-accent-pink/30 shadow-xl relative overflow-hidden text-left"
+                        >
                             <div className="absolute top-0 right-0 w-32 h-32 bg-accent-pink/5 rounded-full -mr-16 -mt-16 blur-3xl" />
                             <div className="flex -space-x-3 z-10">
                                 {TESTIMONIALS.slice(0, 3).map((t, i) => (
@@ -257,7 +286,14 @@ const FeatureCardsSection = () => {
                     </div>
 
                     {/* Center Column - Interactive Session - Come from bottom staggered */}
-                    <motion.div style={{ y: card4_y, opacity: card4_opacity, scale: card4_scale }} className="relative rounded-2xl overflow-hidden h-[500px] group bg-card border border-border shadow-xl">
+                    <motion.div 
+                        style={!isMobile ? { y: card4_y, opacity: card4_opacity, scale: card4_scale, rotateX: 0 } : {}}
+                        initial={isMobile ? { opacity: 0, y: 80, scale: 0.9, rotateX: 20 } : {}}
+                        whileInView={isMobile ? { opacity: 1, y: 0, scale: 1, rotateX: 0 } : {}}
+                        viewport={{ once: false, margin: "-50px" }}
+                        transition={{ duration: 1, ease: "easeOut" }}
+                        className="relative rounded-2xl overflow-hidden h-[500px] group bg-card border border-border shadow-xl"
+                    >
                         <Image src={imageData.hero[1].src} alt="Live Coaching" fill className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-ai-hint={imageData.hero[1].hint} />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
                         <div className="absolute bottom-10 left-0 w-full px-6 z-20 text-center">
@@ -270,7 +306,14 @@ const FeatureCardsSection = () => {
                     {/* Right Column */}
                     <div className="flex flex-col gap-4 h-[500px]">
                         {/* Academic Programs - From Right Middle staggered */}
-                        <motion.div style={{ x: card5_x, opacity: card5_opacity, scale: card5_scale, rotate: card5_rotate }} className="bg-white dark:bg-neutral-surface rounded-2xl p-6 flex flex-col justify-between h-[270px] relative overflow-hidden border border-accent-lightgreen/30 shadow-xl text-left">
+                        <motion.div 
+                            style={!isMobile ? { x: card5_x, y: card5_y, opacity: card5_opacity, scale: card5_scale, rotate: card5_rotate } : {}}
+                            initial={isMobile ? { opacity: 0, y: 70, scale: 0.95 } : {}}
+                            whileInView={isMobile ? { opacity: 1, y: 0, scale: 1 } : {}}
+                            viewport={{ once: false, margin: "-50px" }}
+                            transition={{ duration: 0.8, ease: "easeOut" }}
+                            className="bg-white dark:bg-neutral-surface rounded-2xl p-6 flex flex-col justify-between h-[270px] relative overflow-hidden border border-accent-lightgreen/30 shadow-xl text-left"
+                        >
                             <div className="absolute top-0 right-0 w-40 h-40 bg-accent-lightgreen/5 rounded-full -mr-20 -mt-20 blur-3xl" />
                             <div className="z-10">
                                 <h2 className="text-[48px] leading-[1] font-bold text-foreground">5+</h2>
@@ -283,7 +326,14 @@ const FeatureCardsSection = () => {
                         </motion.div>
 
                         {/* Resource Library - From Right Bottom staggered */}
-                        <motion.div style={{ x: card6_x, y: card6_y, opacity: card6_opacity, scale: card6_scale, rotate: card6_rotate }} className="bg-white dark:bg-neutral-surface rounded-2xl p-6 flex flex-col justify-between flex-grow overflow-hidden border border-accent-yellow/30 shadow-xl relative text-left">
+                        <motion.div 
+                            style={!isMobile ? { x: card6_x, y: card6_y, opacity: card6_opacity, scale: card6_scale, rotate: card6_rotate } : {}}
+                            initial={isMobile ? { opacity: 0, y: 80, scale: 0.95 } : {}}
+                            whileInView={isMobile ? { opacity: 1, y: 0, scale: 1 } : {}}
+                            viewport={{ once: false, margin: "-50px" }}
+                            transition={{ duration: 0.8, ease: "easeOut" }}
+                            className="bg-white dark:bg-neutral-surface rounded-2xl p-6 flex flex-col justify-between flex-grow overflow-hidden border border-accent-yellow/30 shadow-xl relative text-left"
+                        >
                             <div className="absolute top-0 right-0 w-36 h-36 bg-accent-yellow/5 rounded-full -mr-18 -mt-18 blur-3xl" />
                             <p className="font-bold text-xl text-foreground mb-4 z-10">Resource Library</p>
                             <div className="flex flex-col gap-3 z-10">
@@ -361,10 +411,10 @@ const ProgressFeature = ({ scrollYProgress, item, index, isMobile, side }: {
     side: 'left' | 'right'
 }) => {
     const startOffset = 0.2;
-    const mobileStart = 0.3;
+    const mobileStart = 0.15; // Trigger earlier on mobile
 
     const points = isMobile
-        ? [mobileStart + index * 0.05, mobileStart + 0.15 + index * 0.05, 0.65, 0.85]
+        ? [mobileStart + index * 0.08, mobileStart + 0.25 + index * 0.08, 0.75, 0.95]
         : [startOffset + index * 0.05, startOffset + 0.2 + index * 0.05, 0.65, 0.85];
 
     const x = useTransform(scrollYProgress, points,
@@ -376,22 +426,27 @@ const ProgressFeature = ({ scrollYProgress, item, index, isMobile, side }: {
     );
 
     const opacity = useTransform(scrollYProgress,
-        isMobile ? [mobileStart + index * 0.05, mobileStart + 0.1 + index * 0.05, 0.75, 0.85] : [startOffset + index * 0.05, startOffset + 0.15 + index * 0.05, 0.75, 0.85],
+        isMobile ? [mobileStart + index * 0.08, mobileStart + 0.15 + index * 0.08, 0.8, 0.95] : [startOffset + index * 0.05, startOffset + 0.15 + index * 0.05, 0.75, 0.85],
         [0, 1, 1, 0]
     );
 
-    const scale = useTransform(scrollYProgress, points, [0.95, 1, 1, 0.95]);
+    const scale = useTransform(scrollYProgress, points, [isMobile ? 0.9 : 0.9, 1, 1, isMobile ? 0.9 : 0.9]);
+    const rotateX = useTransform(scrollYProgress, points, [isMobile ? 0 : 45, 0, 0, isMobile ? 0 : 45]);
 
     return (
         <motion.div
-            style={{ x, y, opacity, scale }}
+            style={!isMobile ? { x, y, opacity, scale, rotateX, transformStyle: "preserve-3d" } : { x, y, opacity, scale }}
+            initial={isMobile ? { opacity: 0, y: 30 } : {}}
+            whileInView={isMobile ? { opacity: 1, y: 0 } : {}}
+            viewport={{ once: false, margin: "-100px" }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
             className={`flex flex-col items-center ${side === 'left' ? 'lg:items-end' : 'lg:items-start'} gap-3 ${item.offset && !isMobile ? (side === 'left' ? 'lg:mr-12' : 'lg:ml-12') : ''}`}
         >
-            <div className="h-10 w-10 rounded-full bg-brand/10 flex items-center justify-center text-brand font-bold border border-brand/20 mb-1">
-                {side === 'left' ? `0${index * 2 + 1}` : `0${index * 2 + 2}`}
+            <div className="h-12 w-12 rounded-full bg-brand/10 flex items-center justify-center text-brand font-bold border-2 border-brand/20 mb-1 shadow-md">
+                {`0${index + 1}`}
             </div>
-            <h3 className="text-xl md:text-2xl font-bold leading-tight text-foreground">{item.title}</h3>
-            <p className="text-sm md:text-base text-neutral-text-muted max-w-[300px] leading-relaxed">{item.description}</p>
+            <h3 className="text-xl md:text-3xl font-bold leading-tight text-foreground">{item.title}</h3>
+            <p className="text-sm md:text-lg text-neutral-text-muted max-w-[320px] leading-relaxed">{item.description}</p>
         </motion.div>
     );
 };
@@ -418,13 +473,15 @@ const ProgressSection = () => {
         restDelta: 0.001
     });
 
-    // Center Image Transforms
-    const centerScale = useTransform(smoothProgress, [0.1, 0.4, 0.6, 0.85], [0.8, 1, 1, 0.8]);
-    const centerOpacity = useTransform(smoothProgress, [0.1, 0.3, 0.7, 0.85], [0, 1, 1, 0]);
+    // Center Image Transforms (Clean parallax)
+    const centerScale = useTransform(smoothProgress, [0.05, 0.4, 0.7, 0.95], [0.7, 1, 1, 0.7]);
+    const centerOpacity = useTransform(smoothProgress, [0.05, 0.25, 0.75, 0.95], [0, 1, 1, 0]);
+    const centerZ = useTransform(smoothProgress, [0.05, 0.4, 0.7, 0.95], [-200, 0, 0, -200]);
 
     // Header Transforms
-    const headerOpacity = useTransform(smoothProgress, [0, 0.15, 0.75, 0.9], [0, 1, 1, 0]);
-    const headerY = useTransform(smoothProgress, [0, 0.15, 0.75, 0.9], [30, 0, 0, 30]);
+    const headerOpacity = useTransform(smoothProgress, [0, 0.1, 0.85, 0.95], [0, 1, 1, 0]);
+    const headerY = useTransform(smoothProgress, [0, 0.1, 0.85, 0.95], [80, 0, 0, 80]);
+    const headerScale = useTransform(smoothProgress, [0, 0.1, 0.85, 0.95], [0.8, 1, 1, 0.8]);
 
     // Ring Transforms
     const ringScale = useTransform(smoothProgress, [0.1, 0.5, 0.6, 0.85], [0.5, 1.2, 1.2, 0.5]);
@@ -442,40 +499,62 @@ const ProgressSection = () => {
                     </h2>
                 </motion.div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] gap-12 lg:gap-8 items-center relative">
-                    {/* Left Features */}
-                    <div className="flex flex-col justify-between h-full py-6 space-y-12 lg:space-y-24 text-center lg:text-right order-2 lg:order-1">
-                        {progressFeatures.map((item, i) => item.side === 'left' ? (
-                            <ProgressFeature key={item.title} scrollYProgress={smoothProgress} item={item} index={i} isMobile={isMobile} side="left" />
-                        ) : null)}
-                    </div>
-
-                    {/* Center Image */}
-                    <div className="relative flex justify-center items-center order-1 lg:order-2">
-                        <motion.div
-                            style={{ scale: centerScale, opacity: centerOpacity }}
-                            className="relative w-[280px] h-[280px] md:w-[450px] md:h-[450px] rounded-full bg-neutral-surfaceAlt overflow-hidden shadow-xl z-10 border-4 md:border-8 border-white dark:border-neutral-surface"
-                        >
-                            <Image src={imageData.hero[3].src} alt="Student success" className="w-full h-full object-cover" fill data-ai-hint={imageData.hero[3].hint} />
-                            <div className="absolute inset-0 bg-gradient-to-t from-brand/20 to-transparent"></div>
-                        </motion.div>
-
-                        {/* Decorative Rings */}
-                        {!isMobile && (
+                {isMobile ? (
+                    <div className="flex flex-col gap-16">
+                        {/* Center Image for Mobile - Top of list or middle? User usually prefers middle but let's see */}
+                        <div className="relative flex justify-center items-center py-8" style={{ perspective: "2000px" }}>
                             <motion.div
-                                style={{ scale: ringScale, opacity: ringOpacity }}
-                                className="absolute w-[400px] h-[400px] md:w-[600px] md:h-[600px] rounded-full border border-brand/20 -z-10"
-                            />
-                        )}
-                    </div>
+                                style={{ scale: centerScale, opacity: centerOpacity, z: centerZ }}
+                                className="relative w-[280px] h-[280px] rounded-full bg-neutral-surfaceAlt overflow-hidden shadow-2xl z-10 border-4 border-white dark:border-neutral-surface"
+                            >
+                                <Image src={imageData.hero[3].src} alt="Student success" className="w-full h-full object-cover" fill data-ai-hint={imageData.hero[3].hint} />
+                                <div className="absolute inset-0 bg-gradient-to-t from-brand/20 via-transparent to-transparent"></div>
+                            </motion.div>
+                        </div>
 
-                    {/* Right Features */}
-                    <div className="flex flex-col justify-between h-full py-6 space-y-12 lg:space-y-24 text-center lg:text-left order-3">
-                        {progressFeatures.map((item, i) => item.side === 'right' ? (
-                            <ProgressFeature key={item.title} scrollYProgress={smoothProgress} item={item} index={i} isMobile={isMobile} side="right" />
-                        ) : null)}
+                        {/* Features in order 01-06 */}
+                        <div className="flex flex-col gap-12 text-center">
+                            {progressFeatures.map((item, i) => (
+                                <ProgressFeature key={item.title} scrollYProgress={smoothProgress} item={item} index={i} isMobile={isMobile} side={item.side as any} />
+                            ))}
+                        </div>
                     </div>
-                </div>
+                ) : (
+                    <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] gap-12 lg:gap-8 items-center relative">
+                        {/* Left Features */}
+                        <div className="flex flex-col justify-between h-full py-6 space-y-12 lg:space-y-24 text-center lg:text-right order-2 lg:order-1">
+                            {progressFeatures.map((item, i) => item.side === 'left' ? (
+                                <ProgressFeature key={item.title} scrollYProgress={smoothProgress} item={item} index={i} isMobile={isMobile} side="left" />
+                            ) : null)}
+                        </div>
+
+                        {/* Center Image */}
+                        <div className="relative flex justify-center items-center order-1 lg:order-2" style={{ perspective: "2000px" }}>
+                            <motion.div
+                                style={{ scale: centerScale, opacity: centerOpacity, z: centerZ }}
+                                className="relative w-[280px] h-[280px] md:w-[500px] md:h-[500px] rounded-full bg-neutral-surfaceAlt overflow-hidden shadow-2xl z-10 border-4 md:border-[12px] border-white dark:border-neutral-surface"
+                            >
+                                <Image src={imageData.hero[3].src} alt="Student success" className="w-full h-full object-cover" fill data-ai-hint={imageData.hero[3].hint} />
+                                <div className="absolute inset-0 bg-gradient-to-t from-brand/20 via-transparent to-transparent"></div>
+                            </motion.div>
+
+                            {/* Decorative Rings */}
+                            {!isMobile && (
+                                <motion.div
+                                    style={{ scale: ringScale, opacity: ringOpacity }}
+                                    className="absolute w-[400px] h-[400px] md:w-[600px] md:h-[600px] rounded-full border border-brand/20 -z-10"
+                                />
+                            )}
+                        </div>
+
+                        {/* Right Features */}
+                        <div className="flex flex-col justify-between h-full py-6 space-y-12 lg:space-y-24 text-center lg:text-left order-3">
+                            {progressFeatures.map((item, i) => item.side === 'right' ? (
+                                <ProgressFeature key={item.title} scrollYProgress={smoothProgress} item={item} index={i} isMobile={isMobile} side="right" />
+                            ) : null)}
+                        </div>
+                    </div>
+                )}
             </div>
         </section>
     );
@@ -526,28 +605,53 @@ const programData = [
     }
 ];
 
-const PopularProgramsSection = () => {
-    const sectionRef = useRef<HTMLElement>(null);
-    const { scrollYProgress } = useScroll({
-        target: sectionRef,
-        offset: ["start end", "end start"]
-    });
-
-    const smoothProgress = useSpring(scrollYProgress, {
-        stiffness: 70,
-        damping: 30,
-        restDelta: 0.001
-    });
-
+const ProgramCard = ({ program, i }: { program: any, i: number }) => {
     return (
-        <section ref={sectionRef} id="exams" className="py-20 md:py-32 bg-neutral-bg px-4 md:px-6 overflow-hidden">
+        <motion.div
+            initial={{ 
+                opacity: 0, 
+                rotateY: 90, 
+                scale: 0.7,
+                z: -500 
+            }}
+            whileInView={{ 
+                opacity: 1, 
+                rotateY: 0, 
+                scale: 1,
+                z: 0 
+            }}
+            viewport={{ once: false, margin: "-100px" }}
+            transition={{
+                duration: 1.2,
+                delay: i * 0.15,
+                ease: [0.22, 1, 0.36, 1] // Custom smooth ease
+            }}
+            style={{ transformStyle: "preserve-3d" }}
+            className="bg-neutral-surface border border-neutral-border rounded-2xl p-5 pb-8 flex flex-col group hover:shadow-2xl transition-shadow duration-500 will-change-transform"
+        >
+            <div className="relative w-full h-[240px] rounded-xl overflow-hidden mb-6 bg-white shadow-inner">
+                <Image src={program.image} alt={program.title} fill className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" data-ai-hint={program.hint} />
+                <div className="absolute top-4 left-4 bg-brand text-white px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-lg">{program.tag}</div>
+            </div>
+            <h3 className="text-2xl font-bold mb-3 group-hover:text-brand transition-colors">{program.title}</h3>
+            <p className="text-neutral-text-muted text-sm leading-relaxed mb-6">{program.description}</p>
+            <div className="mt-auto">
+                <Button variant="outline" size="sm" className="rounded-xl font-bold group-hover:bg-brand group-hover:text-white transition-all shadow-sm">Learn More</Button>
+            </div>
+        </motion.div>
+    );
+};
+
+const PopularProgramsSection = () => {
+    return (
+        <section id="exams" className="py-20 md:py-32 bg-neutral-bg px-4 md:px-6 overflow-hidden">
             <div className="max-w-[1200px] mx-auto">
                 <div className="flex flex-col md:flex-row justify-between items-end gap-4 mb-12 md:mb-16">
                     <motion.div
-                        style={{
-                            opacity: useTransform(smoothProgress, [0, 0.15, 0.85, 1], [0, 1, 1, 0]),
-                            y: useTransform(smoothProgress, [0, 0.15, 0.85, 1], [30, 0, 0, 30])
-                        }}
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: false }}
+                        transition={{ duration: 0.8 }}
                         className="max-w-[500px]"
                     >
                         <h2 className="text-3xl md:text-[56px] md:leading-[1.1] font-bold mb-4">Our Premier Programs</h2>
@@ -555,35 +659,10 @@ const PopularProgramsSection = () => {
                     </motion.div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                    {programData.map((program, i) => {
-                        const delay = i * 0.04;
-                        // Use addition for all points to keep the sequence logical
-                        const points = [0.1 + delay, 0.3 + delay, 0.6 + delay, 0.8 + delay];
-                        const opacityPoints = [0.1 + delay, 0.25 + delay, 0.7 + delay, 0.85 + delay];
-
-                        return (
-                            <motion.div
-                                key={program.title}
-                                style={{
-                                    opacity: useTransform(smoothProgress, opacityPoints, [0, 1, 1, 0]),
-                                    y: useTransform(smoothProgress, points, [50, 0, 0, 50]),
-                                    scale: useTransform(smoothProgress, points, [0.95, 1, 1, 0.95])
-                                }}
-                                className="bg-neutral-surface border border-neutral-border rounded-2xl p-5 pb-8 flex flex-col group hover:shadow-2xl transition-shadow duration-500"
-                            >
-                                <div className="relative w-full h-[240px] rounded-xl overflow-hidden mb-6 bg-white">
-                                    <Image src={program.image} alt={program.title} fill className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" data-ai-hint={program.hint} />
-                                    <div className="absolute top-4 left-4 bg-brand text-white px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-lg">{program.tag}</div>
-                                </div>
-                                <h3 className="text-2xl font-bold mb-3 group-hover:text-brand transition-colors">{program.title}</h3>
-                                <p className="text-neutral-text-muted text-sm leading-relaxed mb-6">{program.description}</p>
-                                <div className="mt-auto">
-                                    <Button variant="outline" size="sm" className="rounded-xl font-bold group-hover:bg-brand group-hover:text-white transition-all">Learn More</Button>
-                                </div>
-                            </motion.div>
-                        );
-                    })}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8" style={{ perspective: "2000px" }}>
+                    {programData.map((program, i) => (
+                        <ProgramCard key={program.title} program={program} i={i} />
+                    ))}
                 </div>
             </div>
         </section>
@@ -630,24 +709,71 @@ const FaqSection = () => (
     </section>
 );
 
-const ContactSection = () => (
-    <section id="contact" className="max-w-[1200px] mx-auto py-10 md:py-16 px-4 md:px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-            <div data-gsap-fade-up>
-                <h2 className="text-3xl md:text-[48px] md:leading-[1.1] font-bold mb-4">Talk to an Academic Counselor</h2>
-                <p className="text-neutral-text-muted text-base md:text-lg mb-6">Not sure which program fits you? Schedule a free counseling session today.</p>
+const ContactSection = () => {
+    const containerRef = useRef<HTMLElement>(null);
+    const { scrollYProgress } = useScroll({
+        target: containerRef,
+        offset: ["start end", "end start"]
+    });
+
+    const [isDesktop, setIsDesktop] = useState(false);
+    useEffect(() => {
+        const checkDesktop = () => setIsDesktop(window.innerWidth >= 1024);
+        checkDesktop();
+        window.addEventListener('resize', checkDesktop);
+        return () => window.removeEventListener('resize', checkDesktop);
+    }, []);
+
+    // Text animations (Coming from extreme top-left near navbar)
+    const textX = useTransform(scrollYProgress, [0, 0.4], [-800, 0]);
+    const textY = useTransform(scrollYProgress, [0, 0.4], [-1000, 0]);
+    const textScale = useTransform(scrollYProgress, [0, 0.4], [1.5, 1]);
+    const textOpacity = useTransform(scrollYProgress, [0, 0.1, 0.4], [0, 0.5, 1]);
+
+    // Form animations (Coming from extreme top-right near navbar)
+    const formX = useTransform(scrollYProgress, [0, 0.4], [800, 0]);
+    const formY = useTransform(scrollYProgress, [0, 0.4], [-1000, 0]);
+    const formOpacity = useTransform(scrollYProgress, [0, 0.1, 0.4], [0, 0.5, 1]);
+
+    return (
+        <section ref={containerRef} id="contact" className="max-w-[1200px] mx-auto py-10 md:py-32 px-4 md:px-6 relative">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-20 items-center">
+                <motion.div 
+                    style={isDesktop ? { x: textX, y: textY, scale: textScale, opacity: textOpacity } : {}}
+                    initial={!isDesktop ? { opacity: 0, y: 30 } : {}}
+                    whileInView={!isDesktop ? { opacity: 1, y: 0 } : {}}
+                    viewport={{ once: false }}
+                    transition={{ duration: 0.8 }}
+                >
+                    <h2 className="text-3xl md:text-[56px] md:leading-[1.1] font-bold mb-6">Talk to an Academic Counselor</h2>
+                    <p className="text-neutral-text-muted text-lg md:text-xl leading-relaxed max-w-[500px]">Not sure which program fits you? Schedule a free counseling session today with our expert faculty members.</p>
+                </motion.div>
+                
+                <motion.div 
+                    style={isDesktop ? { x: formX, y: formY, opacity: formOpacity } : {}}
+                    initial={!isDesktop ? { opacity: 0, y: 30 } : {}}
+                    whileInView={!isDesktop ? { opacity: 1, y: 0 } : {}}
+                    viewport={{ once: false }}
+                    transition={{ duration: 0.8, delay: 0.2 }}
+                    className="bg-white dark:bg-neutral-surface border border-neutral-border p-8 md:p-10 rounded-3xl shadow-xl backdrop-blur-sm"
+                >
+                    <form action="/contact" className="flex flex-col gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="space-y-2">
+                                <label className="text-sm font-bold text-neutral-text ml-1">Full Name</label>
+                                <input type="text" name="name" placeholder="Full Name" className="w-full h-14 px-5 rounded-xl border border-neutral-border focus:border-brand outline-none bg-white transition-all focus:shadow-lg" required />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-sm font-bold text-neutral-text ml-1">Email Address</label>
+                                <input type="email" name="email" placeholder="Email Address" className="w-full h-14 px-5 rounded-xl border border-neutral-border focus:border-brand outline-none bg-white transition-all focus:shadow-lg" required />
+                            </div>
+                        </div>
+                        <Button type="submit" size="lg" className="w-full h-14 rounded-xl bg-brand hover:bg-brand/90 text-white font-bold text-lg shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-1">
+                            Request Callback
+                        </Button>
+                    </form>
+                </motion.div>
             </div>
-            <div data-gsap-fade-up className="bg-neutral-surface border border-neutral-border p-6 rounded-2xl shadow-sm">
-                <form action="/contact" className="flex flex-col gap-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <input type="text" name="name" placeholder="Full Name" className="w-full h-12 px-4 rounded-lg border border-neutral-border focus:border-brand outline-none bg-white" required />
-                        <input type="email" name="email" placeholder="Email Address" className="w-full h-12 px-4 rounded-lg border border-neutral-border focus:border-brand outline-none bg-white" required />
-                    </div>
-                    <Button type="submit" size="lg" className="w-full h-11 rounded-lg font-semibold">
-                        Request Callback
-                    </Button>
-                </form>
-            </div>
-        </div>
-    </section>
-);
+        </section>
+    );
+};
