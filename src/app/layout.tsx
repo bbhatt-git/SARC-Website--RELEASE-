@@ -122,7 +122,7 @@ export default function RootLayout({
           disableTransitionOnChange={false}
         >
           <Header />
-          <main className="flex-grow pt-20">{children}</main>
+          <main className="flex-grow">{children}</main>
           <Footer />
           <Toaster />
           <GSAPProvider />

@@ -8,151 +8,301 @@ import { ArrowRight } from 'lucide-react';
 import { TESTIMONIALS, WHY_US_ITEMS } from '@/lib/constants';
 import { StaggerTestimonials } from '@/components/ui/stagger-testimonials';
 import { Marquee } from '@/app/components/marquee';
+import { useRef, useState, useEffect } from 'react';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 
 // Based on the SkillForge UI the user liked.
 
 const faqItems = [
-  {
-      question: "What grades/levels does SARC Education Foundation offer?",
-      answer: "We offer classes from Nursery through Grade 12, plus +2 programs."
-  },
-  {
-      question: "Where is SARC Education Foundation located?",
-      answer: "We are located in Mahendranagar, Kanchanpur, Sudurpashchim Province, Nepal."
-  },
-  {
-      question: "What is the medium of instruction?",
-      answer: "We teach in both English and Nepali mediums."
-  },
-  {
-      question: "How do I apply for admission?",
-      answer: "Visit our school office or contact us to collect and submit the admission form."
-  },
-  {
-      question: "What extracurricular activities are available?",
-      answer: "We offer sports, debate, cultural programs, and science exhibitions."
-  },
-  {
-      question: "Does SARC provide scholarships or financial aid?",
-      answer: "Yes, merit-based and need-based scholarships are available for eligible students."
-  },
-  {
-      question: "Is transportation available for students?",
-      answer: "Yes, we provide school bus service covering major areas of Mahendranagar."
-  },
-  {
-      question: "What board/curriculum does the school follow?",
-      answer: "We follow the National Examination Board (NEB) curriculum set by the Government of Nepal."
-  }
+    {
+        question: "What grades/levels does SARC Education Foundation offer?",
+        answer: "We offer classes from Nursery through Grade 12, plus +2 programs."
+    },
+    {
+        question: "Where is SARC Education Foundation located?",
+        answer: "We are located in Mahendranagar, Kanchanpur, Sudurpashchim Province, Nepal."
+    },
+    {
+        question: "What is the medium of instruction?",
+        answer: "We teach in both English and Nepali mediums."
+    },
+    {
+        question: "How do I apply for admission?",
+        answer: "Visit our school office or contact us to collect and submit the admission form."
+    },
+    {
+        question: "What extracurricular activities are available?",
+        answer: "We offer sports, debate, cultural programs, and science exhibitions."
+    },
+    {
+        question: "Does SARC provide scholarships or financial aid?",
+        answer: "Yes, merit-based and need-based scholarships are available for eligible students."
+    },
+    {
+        question: "Is transportation available for students?",
+        answer: "Yes, we provide school bus service covering major areas of Mahendranagar."
+    },
+    {
+        question: "What board/curriculum does the school follow?",
+        answer: "We follow the National Examination Board (NEB) curriculum set by the Government of Nepal."
+    }
 ]
 
 export default function HomeView() {
-  return (
-    <>
-      <HeroSection />
-      <StatsTicker />
-      <ProgressSection />
-      <PopularProgramsSection />
-      <TestimonialsSection />
-      <FaqSection />
-      <ContactSection />
-    </>
-  );
+    return (
+        <>
+            <HeroSection />
+            <FeatureCardsSection />
+            <StatsTicker />
+            <ProgressSection />
+            <PopularProgramsSection />
+            <TestimonialsSection />
+            <FaqSection />
+            <ContactSection />
+        </>
+    );
 }
 
-const HeroSection = () => (
-    <section className="relative w-full max-w-[1408px] mx-auto min-h-screen md:min-h-[800px] rounded-b-[20px] bg-gradient-to-b from-neutral-surface to-neutral-bg overflow-hidden flex flex-col items-center pt-20 md:pt-32">
-        <div className="w-full max-w-[1200px] px-4 md:px-6 mx-auto z-10 flex flex-col items-center text-center">
-            <div data-gsap-fade-up className="inline-flex items-center gap-2 bg-neutral-bg/80 backdrop-blur px-4 py-2 rounded-full shadow-sm mb-6 border border-neutral-border">
-                <span className="font-semibold text-sm">Top Rated Academy in Far-West Nepal</span>
-            </div>
+const HeroSection = () => {
+    const containerRef = useRef<HTMLElement>(null);
+    const [isMobile, setIsMobile] = useState(false);
 
-            <h1 data-gsap-fade-up className="max-w-[800px] text-4xl md:text-[56px] md:leading-[1.1] font-bold capitalize mb-5">
-                Pioneering Futures with <span className="text-brand">Elite Mentorship</span>
-            </h1>
-            
-            <p data-gsap-fade-up className="max-w-[550px] text-neutral-text-muted text-base md:text-lg mb-8">
-                Join the leading educational institution in Kanchanpur. Personalized tuition, modern labs, and a curriculum designed for the future.
-            </p>
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
-            <div data-gsap-fade-up className="flex flex-col sm:flex-row items-center gap-3">
-                <Button asChild size="lg" className="h-11 px-6 rounded-lg font-semibold group">
-                    <Link href="/admissions">
-                        Apply Now <ArrowRight className="w-4 h-4 ml-2 transition-transform duration-300 group-hover:translate-x-1" />
-                    </Link>
-                </Button>
-                <Button asChild size="lg" variant="outline" className="h-11 px-6 rounded-lg font-semibold">
-                    <Link href="/academics/programs">Explore Programs</Link>
-                </Button>
-            </div>
-            
-             {/* Hero Grid Cards */}
-            <div className="w-full mt-12 grid grid-cols-1 md:grid-cols-[1fr_1fr_1fr] gap-3 h-auto md:h-[450px]">
-                {/* Left */}
-                <div className="flex flex-col gap-3 h-full">
-                    <div data-gsap-fade-left className="grid grid-cols-2 gap-3 h-[180px]">
-                        <div className="relative rounded-xl overflow-hidden group bg-card border border-border">
-                            <Image src={imageData.gallery[16].src} alt="Robotics lab" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" fill data-ai-hint={imageData.gallery[16].hint} />
-                        </div>
-                        <div className="relative rounded-xl overflow-hidden group bg-card border border-border">
-                            <Image src={imageData.gallery[20].src} alt="Science lab" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" fill data-ai-hint={imageData.gallery[20].hint} />
-                        </div>
-                    </div>
-                    <div data-gsap-fade-left className="bg-gradient-to-br from-accent-pink/20 to-accent-pink/10 dark:from-accent-pink/10 dark:to-accent-pink/5 rounded-xl p-5 flex flex-col justify-between flex-grow border border-accent-pink/30">
-                        <div className="flex -space-x-2">
-                           <Image src={TESTIMONIALS[0].image} width={36} height={36} className="w-9 h-9 rounded-full border-2 border-accent-pink/30 object-cover" alt="Student 1"/>
-                           <Image src={TESTIMONIALS[1].image} width={36} height={36} className="w-9 h-9 rounded-full border-2 border-accent-pink/30 object-cover" alt="Student 2"/>
-                           <Image src={TESTIMONIALS[2].image} width={36} height={36} className="w-9 h-9 rounded-full border-2 border-accent-pink/30 object-cover" alt="Student 3"/>
-                        </div>
-                        <div className="flex justify-between items-end mt-3 text-left">
-                            <div>
-                                <h2 className="text-[42px] leading-[1] font-semibold text-foreground">95%</h2>
-                                <p className="text-sm text-muted-foreground font-medium">Student Success Rate</p>
-                            </div>
-                            <Button asChild size="sm" className="h-8 px-3 rounded-lg bg-background text-foreground border border-border text-xs font-semibold hover:bg-accent">
-                              <Link href="/admissions">Apply Now</Link>
-                            </Button>
-                        </div>
-                    </div>
-                </div>
+    const { scrollYProgress } = useScroll({
+        target: containerRef,
+        offset: ["start start", "end end"]
+    });
 
-                {/* Center */}
-                <div data-gsap-fade-up className="relative rounded-xl overflow-hidden h-[450px] group bg-card border border-border">
-                    <Image src={imageData.hero[1].src} alt="Live Coaching" fill className="absolute inset-0 w-full h-full object-cover" data-ai-hint={imageData.hero[1].hint} />
-                    <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-center w-full px-4 z-20">
-                        <span className="bg-brand px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider mb-2 inline-block">Hybrid Learning</span>
-                        <h3 className="text-xl font-bold text-foreground">Interactive Coaching Sessions</h3>
-                    </div>
-                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
-                </div>
+    // Smooth out the scroll progress for a buttery feel
+    const smoothProgress = useSpring(scrollYProgress, {
+        stiffness: 40, // Lower stiffness = slower response
+        damping: 20,   // Balanced damping = smooth finish
+        restDelta: 0.001
+    });
+
+    // Scale from 1 to 1.3 to avoid overzooming and pixelation
+    const scale = useTransform(smoothProgress, [0, 1], [1, 1.3]);
+    
+    // Text and overlay fades out as we scroll down
+    const opacity = useTransform(smoothProgress, [0, 0.5], [1, 0]);
+    const y = useTransform(smoothProgress, [0, 0.5], [0, -80]);
+    
+    // Background overlay darkens slightly more as we zoom
+    const bgOpacity = useTransform(smoothProgress, [0, 1], [0.6, 0.8]);
+
+    return (
+        <section ref={containerRef} className="relative w-full h-[150vh] md:h-[200vh] bg-neutral-bg">
+            <div className="sticky top-0 w-full h-screen overflow-hidden flex flex-col items-center justify-center pt-24 md:pt-32 pb-20 md:pb-32">
+                {/* Background Image with Zoom */}
+                <motion.div style={{ scale }} className="absolute inset-0 z-0 origin-center will-change-transform">
+                    <Image
+                        src="/images/hero-bg.png"
+                        alt="Hero Background"
+                        fill
+                        className="object-cover opacity-50 dark:opacity-30"
+                        priority
+                    />
+                </motion.div>
                 
-                {/* Right */}
-                 <div className="flex flex-col gap-3 h-[450px]">
-                    <div data-gsap-fade-right className="bg-gradient-to-br from-accent-lightgreen/20 to-accent-lightgreen/10 dark:from-accent-lightgreen/10 dark:to-accent-lightgreen/5 rounded-xl p-5 flex flex-col justify-between h-[250px] relative overflow-hidden border border-accent-lightgreen/30">
-                        <div className="z-10 text-left">
-                            <h2 className="text-[42px] leading-[1] font-semibold text-foreground">5+</h2>
-                            <p className="text-sm text-muted-foreground font-medium">Academic Programs</p>
-                        </div>
-                        <p className="font-semibold z-10 text-base text-left text-foreground">+2 Science, Management, Law, CTEVT, and Bridge Courses.</p>
+                {/* Dynamic Overlay */}
+                <motion.div style={{ opacity: bgOpacity }} className="absolute inset-0 bg-gradient-to-b from-neutral-bg/30 via-neutral-bg/70 to-neutral-bg z-0 pointer-events-none will-change-transform" />
+
+                <motion.div style={{ opacity, y }} className="w-full max-w-[1200px] px-4 md:px-6 mx-auto z-10 flex flex-col items-center text-center will-change-transform">
+                    <div className="inline-flex items-center gap-2 bg-neutral-bg/80 backdrop-blur px-4 py-2 rounded-full shadow-sm mb-6 border border-neutral-border">
+                        <span className="font-semibold text-sm">Top Rated Academy in Far-West Nepal</span>
                     </div>
-                    <div data-gsap-fade-right className="bg-gradient-to-br from-accent-yellow/20 to-accent-yellow/10 dark:from-accent-yellow/10 dark:to-accent-yellow/5 rounded-xl p-5 flex flex-col justify-between flex-grow overflow-hidden border border-accent-yellow/30">
-                        <p className="font-semibold text-base text-left text-foreground">Resource Library</p>
-                        <div className="mt-3 flex flex-col gap-2">
-                            <div className="flex gap-2">
-                                <span className="bg-background px-3 py-1.5 rounded-full text-[11px] font-semibold whitespace-nowrap border border-border">Digital Notes</span>
-                                <span className="bg-background px-3 py-1.5 rounded-full text-[11px] font-semibold whitespace-nowrap border border-border">Online Tests</span>
-                            </div>
-                            <div className="flex gap-2">
-                                <span className="bg-background px-3 py-1.5 rounded-full text-[11px] font-semibold whitespace-nowrap border border-border">Recorded Lectures</span>
-                                <span className="bg-background px-3 py-1.5 rounded-full text-[11px] font-semibold whitespace-nowrap border border-border ml-3">PDF Library</span>
-                            </div>
+
+                    <h1 className="max-w-[800px] text-4xl md:text-[64px] md:leading-[1.1] font-bold capitalize mb-6">
+                        Pioneering Futures with <span className="text-brand">Elite Mentorship</span>
+                    </h1>
+
+                    <p className="max-w-[600px] text-neutral-text-muted text-base md:text-xl mb-10">
+                        Join the leading educational institution in Kanchanpur. Personalized tuition, modern labs, and a curriculum designed for the future.
+                    </p>
+
+                    <div className="flex flex-col sm:flex-row items-center gap-4">
+                        <Button asChild size="lg" className="h-12 px-8 rounded-xl font-semibold group text-lg">
+                            <Link href="/admissions">
+                                Apply Now <ArrowRight className="w-5 h-5 ml-2 transition-transform duration-300 group-hover:translate-x-1" />
+                            </Link>
+                        </Button>
+                        <Button asChild size="lg" variant="outline" className="h-12 px-8 rounded-xl font-semibold text-lg bg-neutral-bg/50 backdrop-blur">
+                            <Link href="/academics/programs">Explore Programs</Link>
+                        </Button>
+                    </div>
+                </motion.div>
+
+                {/* Refined Smooth Asymmetrical Divider */}
+                <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] z-20 pointer-events-none">
+                    <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="relative block w-full h-[60px] md:h-[120px] fill-[#f9fafb] dark:fill-neutral-bg">
+                        <path d="M0,80 C300,120 600,0 1200,60 L1200,120 L0,120 Z" />
+                    </svg>
+                </div>
+            </div>
+        </section>
+    );
+};
+
+const FeatureCardsSection = () => {
+    const containerRef = useRef<HTMLElement>(null);
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
+    const { scrollYProgress } = useScroll({
+        target: containerRef,
+        offset: ["start end", "end start"]
+    });
+
+    const smoothProgress = useSpring(scrollYProgress, {
+        stiffness: 100,
+        damping: 30,
+        restDelta: 0.001
+    });
+
+    const getPoints = (delay: number) => [0.1 + delay, 0.35 + delay, 0.55 - delay, 0.85 - delay];
+    const getOpacityPoints = (delay: number) => [0.1 + delay, 0.3 + delay, 0.6 - delay, 0.85 - delay];
+
+    // Individual Transforms for each card
+    // 1. Robotics Lab (Top Left 1)
+    const card1_points = getPoints(0);
+    const card1_x = useTransform(smoothProgress, card1_points, [isMobile ? -30 : -200, 0, 0, isMobile ? -30 : -200]);
+    const card1_opacity = useTransform(smoothProgress, getOpacityPoints(0), [0, 1, 1, 0]);
+    const card1_scale = useTransform(smoothProgress, card1_points, [isMobile ? 1.1 : 1.4, 1, 1, isMobile ? 1.1 : 1.4]);
+    const card1_rotate = useTransform(smoothProgress, card1_points, [isMobile ? -4 : -12, 0, 0, isMobile ? 4 : 12]);
+
+    // 2. Science Lab (Top Left 2)
+    const card2_points = getPoints(0.04);
+    const card2_x = useTransform(smoothProgress, card2_points, [isMobile ? -40 : -250, 0, 0, isMobile ? -40 : -250]);
+    const card2_opacity = useTransform(smoothProgress, getOpacityPoints(0.04), [0, 1, 1, 0]);
+    const card2_scale = useTransform(smoothProgress, card2_points, [isMobile ? 1.12 : 1.45, 1, 1, isMobile ? 1.12 : 1.45]);
+    const card2_rotate = useTransform(smoothProgress, card2_points, [isMobile ? -6 : -15, 0, 0, isMobile ? 6 : 15]);
+
+    // 3. Success Rate (Bottom Left)
+    const card3_points = getPoints(0.08);
+    const card3_x = useTransform(smoothProgress, card3_points, [isMobile ? -50 : -300, 0, 0, isMobile ? -50 : -300]);
+    const card3_y = useTransform(smoothProgress, card3_points, [isMobile ? 60 : 180, 0, 0, isMobile ? 60 : 180]);
+    const card3_opacity = useTransform(smoothProgress, getOpacityPoints(0.08), [0, 1, 1, 0]);
+    const card3_scale = useTransform(smoothProgress, card3_points, [isMobile ? 1.15 : 1.5, 1, 1, isMobile ? 1.15 : 1.5]);
+    const card3_rotate = useTransform(smoothProgress, card3_points, [isMobile ? -8 : -18, 0, 0, isMobile ? 8 : 18]);
+
+    // 4. Interactive Session (Center)
+    const card4_points = getPoints(0.06);
+    const card4_y = useTransform(smoothProgress, card4_points, [isMobile ? 80 : 250, 0, 0, isMobile ? 80 : 250]);
+    const card4_opacity = useTransform(smoothProgress, getOpacityPoints(0.06), [0, 1, 1, 0]);
+    const card4_scale = useTransform(smoothProgress, card4_points, [isMobile ? 1.1 : 1.4, 1, 1, isMobile ? 1.1 : 1.4]);
+
+    // 5. Academic Programs (Top Right)
+    const card5_points = getPoints(0.02);
+    const card5_x = useTransform(smoothProgress, card5_points, [isMobile ? 40 : 250, 0, 0, isMobile ? 40 : 250]);
+    const card5_opacity = useTransform(smoothProgress, getOpacityPoints(0.02), [0, 1, 1, 0]);
+    const card5_scale = useTransform(smoothProgress, card5_points, [isMobile ? 1.12 : 1.4, 1, 1, isMobile ? 1.12 : 1.4]);
+    const card5_rotate = useTransform(smoothProgress, card5_points, [isMobile ? 6 : 15, 0, 0, isMobile ? -6 : -15]);
+
+    // 6. Resource Library (Bottom Right)
+    const card6_points = getPoints(0.08);
+    const card6_x = useTransform(smoothProgress, card6_points, [isMobile ? 50 : 300, 0, 0, isMobile ? 50 : 300]);
+    const card6_y = useTransform(smoothProgress, card6_points, [isMobile ? 70 : 200, 0, 0, isMobile ? 70 : 200]);
+    const card6_opacity = useTransform(smoothProgress, getOpacityPoints(0.08), [0, 1, 1, 0]);
+    const card6_scale = useTransform(smoothProgress, card6_points, [isMobile ? 1.15 : 1.5, 1, 1, isMobile ? 1.15 : 1.5]);
+    const card6_rotate = useTransform(smoothProgress, card6_points, [isMobile ? 8 : 18, 0, 0, isMobile ? -8 : -18]);
+
+    return (
+        <section ref={containerRef} className="py-20 md:py-40 bg-[#f9fafb] dark:bg-neutral-bg overflow-hidden relative -mt-1">
+            <div className="w-full max-w-[1200px] px-4 md:px-6 mx-auto z-10">
+                {/* Hero Grid Cards with Staggered Scroll-Based Animation */}
+                <div className="w-full grid grid-cols-1 md:grid-cols-[1fr_1fr_1fr] gap-4 h-auto md:h-[500px]">
+                    {/* Left Column */}
+                    <div className="flex flex-col gap-4 h-full">
+                        {/* Top Image Cards - Individual Animations */}
+                        <div className="grid grid-cols-2 gap-4 h-[200px]">
+                            <motion.div style={{ x: card1_x, opacity: card1_opacity, scale: card1_scale, rotate: card1_rotate }} className="relative rounded-2xl overflow-hidden group bg-card border border-border shadow-lg">
+                                <Image src={imageData.gallery[16].src} alt="Robotics lab" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" fill data-ai-hint={imageData.gallery[16].hint} />
+                            </motion.div>
+                            <motion.div style={{ x: card2_x, opacity: card2_opacity, scale: card2_scale, rotate: card2_rotate }} className="relative rounded-2xl overflow-hidden group bg-card border border-border shadow-lg">
+                                <Image src={imageData.gallery[20].src} alt="Science lab" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" fill data-ai-hint={imageData.gallery[20].hint} />
+                            </motion.div>
                         </div>
+
+                        {/* Success Rate Card - Come from left bottom staggered */}
+                        <motion.div style={{ x: card3_x, y: card3_y, opacity: card3_opacity, scale: card3_scale, rotate: card3_rotate }} className="bg-white dark:bg-neutral-surface rounded-2xl p-6 flex flex-col justify-between flex-grow border border-accent-pink/30 shadow-xl relative overflow-hidden text-left">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-accent-pink/5 rounded-full -mr-16 -mt-16 blur-3xl" />
+                            <div className="flex -space-x-3 z-10">
+                                {TESTIMONIALS.slice(0, 3).map((t, i) => (
+                                    <Image key={i} src={t.image} width={42} height={42} className="w-10 h-10 rounded-full border-2 border-neutral-bg object-cover shadow-sm" alt={`Student ${i + 1}`} />
+                                ))}
+                                <div className="w-10 h-10 rounded-full bg-accent-pink/20 border-2 border-neutral-bg flex items-center justify-center text-[10px] font-bold text-accent-pink">+1k</div>
+                            </div>
+                            <div className="flex justify-between items-end mt-4 z-10">
+                                <div>
+                                    <h2 className="text-[48px] leading-[1] font-bold text-foreground">95%</h2>
+                                    <p className="text-sm text-neutral-text-muted font-semibold tracking-wide">Student Success Rate</p>
+                                </div>
+                                <Button asChild size="sm" className="h-9 px-4 rounded-lg bg-accent-pink text-white font-bold hover:opacity-90 transition-opacity">
+                                    <Link href="/admissions">Join Us</Link>
+                                </Button>
+                            </div>
+                        </motion.div>
+                    </div>
+
+                    {/* Center Column - Interactive Session - Come from bottom staggered */}
+                    <motion.div style={{ y: card4_y, opacity: card4_opacity, scale: card4_scale }} className="relative rounded-2xl overflow-hidden h-[500px] group bg-card border border-border shadow-xl">
+                        <Image src={imageData.hero[1].src} alt="Live Coaching" fill className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-ai-hint={imageData.hero[1].hint} />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+                        <div className="absolute bottom-10 left-0 w-full px-6 z-20 text-center">
+                            <span className="bg-brand px-4 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-widest mb-3 inline-block text-white shadow-lg">Hybrid Learning</span>
+                            <h3 className="text-2xl font-bold text-white mb-2">Interactive Coaching Sessions</h3>
+                            <p className="text-white/80 text-sm max-w-[250px] mx-auto">Bridging the gap between physical and digital education.</p>
+                        </div>
+                    </motion.div>
+
+                    {/* Right Column */}
+                    <div className="flex flex-col gap-4 h-[500px]">
+                        {/* Academic Programs - From Right Middle staggered */}
+                        <motion.div style={{ x: card5_x, opacity: card5_opacity, scale: card5_scale, rotate: card5_rotate }} className="bg-white dark:bg-neutral-surface rounded-2xl p-6 flex flex-col justify-between h-[270px] relative overflow-hidden border border-accent-lightgreen/30 shadow-xl text-left">
+                            <div className="absolute top-0 right-0 w-40 h-40 bg-accent-lightgreen/5 rounded-full -mr-20 -mt-20 blur-3xl" />
+                            <div className="z-10">
+                                <h2 className="text-[48px] leading-[1] font-bold text-foreground">5+</h2>
+                                <p className="text-sm text-neutral-text-muted font-semibold tracking-wide mb-4">Academic Programs</p>
+                                <p className="font-bold text-lg text-foreground leading-snug">+2 Science, Management, Law, CTEVT, and specialized Bridge Courses.</p>
+                            </div>
+                            <Link href="/academics/programs" className="z-10 inline-flex items-center text-sm font-bold text-accent-lightgreen hover:underline gap-1">
+                                View all programs <ArrowRight className="w-4 h-4" />
+                            </Link>
+                        </motion.div>
+
+                        {/* Resource Library - From Right Bottom staggered */}
+                        <motion.div style={{ x: card6_x, y: card6_y, opacity: card6_opacity, scale: card6_scale, rotate: card6_rotate }} className="bg-white dark:bg-neutral-surface rounded-2xl p-6 flex flex-col justify-between flex-grow overflow-hidden border border-accent-yellow/30 shadow-xl relative text-left">
+                            <div className="absolute top-0 right-0 w-36 h-36 bg-accent-yellow/5 rounded-full -mr-18 -mt-18 blur-3xl" />
+                            <p className="font-bold text-xl text-foreground mb-4 z-10">Resource Library</p>
+                            <div className="flex flex-col gap-3 z-10">
+                                <div className="flex gap-2">
+                                    <span className="bg-neutral-surface px-4 py-2 rounded-xl text-[12px] font-bold border border-neutral-border shadow-sm">Digital Notes</span>
+                                    <span className="bg-neutral-surface px-4 py-2 rounded-xl text-[12px] font-bold border border-neutral-border shadow-sm">Online Tests</span>
+                                </div>
+                                <div className="flex gap-2">
+                                    <span className="bg-neutral-surface px-4 py-2 rounded-xl text-[12px] font-bold border border-neutral-border shadow-sm">PDF Library</span>
+                                    <span className="bg-neutral-surface px-4 py-2 rounded-xl text-[12px] font-bold border border-neutral-border shadow-sm">Lectures</span>
+                                </div>
+                            </div>
+                        </motion.div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-)
+        </section>
+    );
+};
 
 
 const ProgramText = ({ name }: { name: string }) => (
@@ -161,8 +311,17 @@ const ProgramText = ({ name }: { name: string }) => (
         <span className="text-sm font-medium text-neutral-text-muted tracking-wide uppercase whitespace-nowrap">{name}</span>
     </div>
 );
-  
+
 const StatsTicker = () => {
+    const sectionRef = useRef<HTMLElement>(null);
+    const { scrollYProgress } = useScroll({
+        target: sectionRef,
+        offset: ["start end", "end start"]
+    });
+
+    // We use a large range and percentage to ensure it always covers the screen
+    const x = useTransform(scrollYProgress, [0, 1], ["-10%", "-60%"]);
+
     const programs = [
         '+2 Science',
         'Bridge Course',
@@ -170,14 +329,17 @@ const StatsTicker = () => {
         '+2 Management',
         'Secondary Education',
     ];
-    const duplicatedPrograms = [...programs, ...programs, ...programs, ...programs];
+
+    // Triple duplication for a truly dense, infinite feel
+    const duplicatedPrograms = Array(12).fill(programs).flat();
+
     return (
-        <section className="py-4 bg-neutral-surfaceAlt overflow-hidden border-y border-neutral-border">
-            <Marquee className="[--duration:25s] [--gap:2rem]" pauseOnHover>
+        <section ref={sectionRef} className="py-6 bg-neutral-surfaceAlt overflow-hidden border-y border-neutral-border mt-10">
+            <motion.div style={{ x }} className="flex gap-16 whitespace-nowrap">
                 {duplicatedPrograms.map((program, index) => (
                     <ProgramText key={`${program}-${index}`} name={program} />
                 ))}
-            </Marquee>
+            </motion.div>
         </section>
     );
 };
@@ -191,93 +353,242 @@ const progressFeatures = [
     { side: 'right', delay: 200, title: WHY_US_ITEMS[5].title, description: WHY_US_ITEMS[5].description },
 ];
 
-const ProgressSection = () => (
-    <section id="progress-section" className="py-10 md:py-16 bg-neutral-bg overflow-hidden">
-        <div className="w-full max-w-[1200px] mx-auto px-4 md:px-6 relative">
-            <div className="max-w-[500px] mx-auto text-center mb-10 md:mb-12" data-gsap-fade-up>
-                <h2 className="text-3xl md:text-[48px] font-bold leading-[1.1] capitalize">
-                    Steady Progress,<br className="hidden md:block" />Endless Potential
-                </h2>
+const ProgressFeature = ({ scrollYProgress, item, index, isMobile, side }: {
+    scrollYProgress: any,
+    item: any,
+    index: number,
+    isMobile: boolean,
+    side: 'left' | 'right'
+}) => {
+    const startOffset = 0.2;
+    const mobileStart = 0.3;
+
+    const points = isMobile
+        ? [mobileStart + index * 0.05, mobileStart + 0.15 + index * 0.05, 0.65, 0.85]
+        : [startOffset + index * 0.05, startOffset + 0.2 + index * 0.05, 0.65, 0.85];
+
+    const x = useTransform(scrollYProgress, points,
+        isMobile ? [0, 0, 0, 0] : [side === 'left' ? -100 : 100, 0, 0, side === 'left' ? -100 : 100]
+    );
+
+    const y = useTransform(scrollYProgress, points,
+        isMobile ? [30, 0, 0, 30] : [0, 0, 0, 0]
+    );
+
+    const opacity = useTransform(scrollYProgress,
+        isMobile ? [mobileStart + index * 0.05, mobileStart + 0.1 + index * 0.05, 0.75, 0.85] : [startOffset + index * 0.05, startOffset + 0.15 + index * 0.05, 0.75, 0.85],
+        [0, 1, 1, 0]
+    );
+
+    const scale = useTransform(scrollYProgress, points, [0.95, 1, 1, 0.95]);
+
+    return (
+        <motion.div
+            style={{ x, y, opacity, scale }}
+            className={`flex flex-col items-center ${side === 'left' ? 'lg:items-end' : 'lg:items-start'} gap-3 ${item.offset && !isMobile ? (side === 'left' ? 'lg:mr-12' : 'lg:ml-12') : ''}`}
+        >
+            <div className="h-10 w-10 rounded-full bg-brand/10 flex items-center justify-center text-brand font-bold border border-brand/20 mb-1">
+                {side === 'left' ? `0${index * 2 + 1}` : `0${index * 2 + 2}`}
             </div>
-            <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr_280px] gap-6 items-center relative">
-                <div className="flex flex-col justify-between h-full py-6 space-y-12 lg:space-y-0 text-right order-2 lg:order-1">
-                    {progressFeatures.filter(f => f.side === 'left').map(item => (
-                         <div key={item.title} className={`flex flex-col items-end gap-2 ${item.offset ? 'lg:mr-6' : ''}`} data-gsap-fade-left>
-                            <h3 className="text-xl font-semibold leading-tight">{item.title}</h3>
-                            <p className="text-sm text-neutral-text-muted max-w-[260px]">{item.description}</p>
-                        </div>
-                    ))}
-                </div>
-                <div className="relative flex justify-center items-center order-1 lg:order-2" data-gsap-fade-up>
-                    <div className="relative w-[280px] h-[280px] md:w-[400px] md:h-[400px] rounded-full bg-neutral-surfaceAlt overflow-hidden shadow-xl z-10 border-4 border-white">
-                        <Image src={imageData.hero[3].src} alt="Student success" className="w-full h-full object-cover" fill data-ai-hint={imageData.hero[3].hint}/>
+            <h3 className="text-xl md:text-2xl font-bold leading-tight text-foreground">{item.title}</h3>
+            <p className="text-sm md:text-base text-neutral-text-muted max-w-[300px] leading-relaxed">{item.description}</p>
+        </motion.div>
+    );
+};
+
+const ProgressSection = () => {
+    const sectionRef = useRef<HTMLElement>(null);
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
+    const { scrollYProgress } = useScroll({
+        target: sectionRef,
+        offset: ["start end", "end start"]
+    });
+
+    const smoothProgress = useSpring(scrollYProgress, {
+        stiffness: 70,
+        damping: 30,
+        restDelta: 0.001
+    });
+
+    // Center Image Transforms
+    const centerScale = useTransform(smoothProgress, [0.1, 0.4, 0.6, 0.85], [0.8, 1, 1, 0.8]);
+    const centerOpacity = useTransform(smoothProgress, [0.1, 0.3, 0.7, 0.85], [0, 1, 1, 0]);
+
+    // Header Transforms
+    const headerOpacity = useTransform(smoothProgress, [0, 0.15, 0.75, 0.9], [0, 1, 1, 0]);
+    const headerY = useTransform(smoothProgress, [0, 0.15, 0.75, 0.9], [30, 0, 0, 30]);
+
+    // Ring Transforms
+    const ringScale = useTransform(smoothProgress, [0.1, 0.5, 0.6, 0.85], [0.5, 1.2, 1.2, 0.5]);
+    const ringOpacity = useTransform(smoothProgress, [0.1, 0.5, 0.6, 0.85], [0, 0.5, 0.5, 0]);
+
+    return (
+        <section ref={sectionRef} id="progress-section" className="py-16 md:py-32 bg-neutral-bg overflow-hidden">
+            <div className="w-full max-w-[1200px] mx-auto px-4 md:px-6 relative">
+                <motion.div
+                    style={{ opacity: headerOpacity, y: headerY }}
+                    className="max-w-[600px] mx-auto text-center mb-12 md:mb-24"
+                >
+                    <h2 className="text-3xl md:text-[56px] font-bold leading-[1.1] capitalize">
+                        Steady Progress,<br className="hidden md:block" />Endless Potential
+                    </h2>
+                </motion.div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] gap-12 lg:gap-8 items-center relative">
+                    {/* Left Features */}
+                    <div className="flex flex-col justify-between h-full py-6 space-y-12 lg:space-y-24 text-center lg:text-right order-2 lg:order-1">
+                        {progressFeatures.map((item, i) => item.side === 'left' ? (
+                            <ProgressFeature key={item.title} scrollYProgress={smoothProgress} item={item} index={i} isMobile={isMobile} side="left" />
+                        ) : null)}
+                    </div>
+
+                    {/* Center Image */}
+                    <div className="relative flex justify-center items-center order-1 lg:order-2">
+                        <motion.div
+                            style={{ scale: centerScale, opacity: centerOpacity }}
+                            className="relative w-[280px] h-[280px] md:w-[450px] md:h-[450px] rounded-full bg-neutral-surfaceAlt overflow-hidden shadow-xl z-10 border-4 md:border-8 border-white dark:border-neutral-surface"
+                        >
+                            <Image src={imageData.hero[3].src} alt="Student success" className="w-full h-full object-cover" fill data-ai-hint={imageData.hero[3].hint} />
+                            <div className="absolute inset-0 bg-gradient-to-t from-brand/20 to-transparent"></div>
+                        </motion.div>
+
+                        {/* Decorative Rings */}
+                        {!isMobile && (
+                            <motion.div
+                                style={{ scale: ringScale, opacity: ringOpacity }}
+                                className="absolute w-[400px] h-[400px] md:w-[600px] md:h-[600px] rounded-full border border-brand/20 -z-10"
+                            />
+                        )}
+                    </div>
+
+                    {/* Right Features */}
+                    <div className="flex flex-col justify-between h-full py-6 space-y-12 lg:space-y-24 text-center lg:text-left order-3">
+                        {progressFeatures.map((item, i) => item.side === 'right' ? (
+                            <ProgressFeature key={item.title} scrollYProgress={smoothProgress} item={item} index={i} isMobile={isMobile} side="right" />
+                        ) : null)}
                     </div>
                 </div>
-                <div className="flex flex-col justify-between h-full py-6 space-y-12 lg:space-y-0 text-left order-3">
-                    {progressFeatures.filter(f => f.side === 'right').map(item => (
-                         <div key={item.title} className={`flex flex-col items-start gap-2 ${item.offset ? 'lg:ml-6' : ''}`} data-gsap-fade-right>
-                            <h3 className="text-xl font-semibold leading-tight">{item.title}</h3>
-                            <p className="text-sm text-neutral-text-muted max-w-[260px]">{item.description}</p>
-                        </div>
-                    ))}
-                </div>
             </div>
-        </div>
-    </section>
-);
+        </section>
+    );
+};
 
 const programData = [
-  {
-    title: "+2 Science",
-    description: "A rigorous program for aspiring engineers and medical professionals, focusing on Physics, Chemistry, Biology, and Mathematics.",
-    image: imageData.gallery[20].src,
-    hint: imageData.gallery[20].hint,
-    tag: "SCIENCE STREAM",
-    delay: 0
-  },
-  {
-    title: "+2 Management",
-    description: "Equips students with the fundamentals of business, finance, and economics, preparing them for corporate leadership.",
-    image: imageData.gallery[3].src,
-    hint: imageData.gallery[3].hint,
-    tag: "MANAGEMENT",
-    delay: 100
-  },
-  {
-    title: "Innovation & Learning",
-    description: "Personalized guidance and practical, project-based learning to help students choose the right academic and career path.",
-    image: imageData.gallery[16].src,
-    hint: imageData.gallery[16].hint,
-    tag: "PRACTICAL EDUCATION",
-    delay: 200
-  }
+    {
+        title: "ECD (Nursery-KG)",
+        description: "Foundational early childhood development focusing on play-based learning and social skills.",
+        image: imageData.gallery[10].src,
+        hint: imageData.gallery[10].hint,
+        tag: "EARLY YEARS",
+    },
+    {
+        title: "Primary (1-5)",
+        description: "Comprehensive primary education building core literacy, numeracy, and critical thinking.",
+        image: imageData.gallery[1].src,
+        hint: imageData.gallery[1].hint,
+        tag: "PRIMARY",
+    },
+    {
+        title: "Secondary (6-10)",
+        description: "Advanced secondary curriculum preparing students for higher academic challenges.",
+        image: imageData.gallery[5].src,
+        hint: imageData.gallery[5].hint,
+        tag: "SECONDARY",
+    },
+    {
+        title: "+2 Science",
+        description: "A rigorous program for aspiring engineers and medical professionals, focusing on STEM subjects.",
+        image: imageData.gallery[20].src,
+        hint: imageData.gallery[20].hint,
+        tag: "SCIENCE STREAM",
+    },
+    {
+        title: "+2 Management",
+        description: "Equips students with business, finance, and economics fundamentals for future leadership.",
+        image: imageData.gallery[3].src,
+        hint: imageData.gallery[3].hint,
+        tag: "MANAGEMENT",
+    },
+    {
+        title: "Bridge Courses",
+        description: "Specialized courses to bridge the gap between secondary and higher education streams.",
+        image: imageData.gallery[16].src,
+        hint: imageData.gallery[16].hint,
+        tag: "PREPARATORY",
+    }
 ];
 
-const PopularProgramsSection = () => (
-  <section id="exams" className="py-10 md:py-16 bg-neutral-bg px-4 md:px-6">
-    <div className="max-w-[1200px] mx-auto">
-      <div data-gsap-fade-up className="flex flex-col md:flex-row justify-between items-end gap-4 mb-8 md:mb-10">
-        <div className="max-w-[500px]">
-          <h2 className="text-3xl md:text-[48px] md:leading-[1.1] font-bold mb-3">Our Premier Programs</h2>
-          <p className="text-neutral-text-muted">Specialized programs designed for academic excellence and career success.</p>
-        </div>
-      </div>
+const PopularProgramsSection = () => {
+    const sectionRef = useRef<HTMLElement>(null);
+    const { scrollYProgress } = useScroll({
+        target: sectionRef,
+        offset: ["start end", "end start"]
+    });
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {programData.map(program => (
-           <div key={program.title} data-gsap-fade-up className="bg-neutral-surface border border-neutral-border rounded-xl p-4 pb-6 flex flex-col group hover:shadow-lg transition-all duration-300">
-             <div className="relative w-full h-[200px] rounded-lg overflow-hidden mb-4 bg-white">
-                <Image src={program.image} alt={program.title} fill className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-ai-hint={program.hint} />
-                <div className="absolute top-3 left-3 bg-brand text-white px-3 py-0.5 rounded-full text-[10px] font-bold uppercase">{program.tag}</div>
-             </div>
-             <h3 className="text-xl font-semibold mb-2">{program.title}</h3>
-             <p className="text-neutral-text-muted text-sm">{program.description}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-);
+    const smoothProgress = useSpring(scrollYProgress, {
+        stiffness: 70,
+        damping: 30,
+        restDelta: 0.001
+    });
+
+    return (
+        <section ref={sectionRef} id="exams" className="py-20 md:py-32 bg-neutral-bg px-4 md:px-6 overflow-hidden">
+            <div className="max-w-[1200px] mx-auto">
+                <div className="flex flex-col md:flex-row justify-between items-end gap-4 mb-12 md:mb-16">
+                    <motion.div
+                        style={{
+                            opacity: useTransform(smoothProgress, [0, 0.15, 0.85, 1], [0, 1, 1, 0]),
+                            y: useTransform(smoothProgress, [0, 0.15, 0.85, 1], [30, 0, 0, 30])
+                        }}
+                        className="max-w-[500px]"
+                    >
+                        <h2 className="text-3xl md:text-[56px] md:leading-[1.1] font-bold mb-4">Our Premier Programs</h2>
+                        <p className="text-neutral-text-muted text-lg">Specialized programs designed for academic excellence and career success.</p>
+                    </motion.div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                    {programData.map((program, i) => {
+                        const delay = i * 0.04;
+                        // Use addition for all points to keep the sequence logical
+                        const points = [0.1 + delay, 0.3 + delay, 0.6 + delay, 0.8 + delay];
+                        const opacityPoints = [0.1 + delay, 0.25 + delay, 0.7 + delay, 0.85 + delay];
+
+                        return (
+                            <motion.div
+                                key={program.title}
+                                style={{
+                                    opacity: useTransform(smoothProgress, opacityPoints, [0, 1, 1, 0]),
+                                    y: useTransform(smoothProgress, points, [50, 0, 0, 50]),
+                                    scale: useTransform(smoothProgress, points, [0.95, 1, 1, 0.95])
+                                }}
+                                className="bg-neutral-surface border border-neutral-border rounded-2xl p-5 pb-8 flex flex-col group hover:shadow-2xl transition-shadow duration-500"
+                            >
+                                <div className="relative w-full h-[240px] rounded-xl overflow-hidden mb-6 bg-white">
+                                    <Image src={program.image} alt={program.title} fill className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" data-ai-hint={program.hint} />
+                                    <div className="absolute top-4 left-4 bg-brand text-white px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-lg">{program.tag}</div>
+                                </div>
+                                <h3 className="text-2xl font-bold mb-3 group-hover:text-brand transition-colors">{program.title}</h3>
+                                <p className="text-neutral-text-muted text-sm leading-relaxed mb-6">{program.description}</p>
+                                <div className="mt-auto">
+                                    <Button variant="outline" size="sm" className="rounded-xl font-bold group-hover:bg-brand group-hover:text-white transition-all">Learn More</Button>
+                                </div>
+                            </motion.div>
+                        );
+                    })}
+                </div>
+            </div>
+        </section>
+    );
+};
 
 
 const TestimonialsSection = () => (
@@ -296,47 +607,47 @@ const TestimonialsSection = () => (
 
 
 const FaqSection = () => (
-  <section id="faq" className="max-w-[1200px] mx-auto py-10 md:py-16 px-4 md:px-6 bg-neutral-surfaceAlt md:rounded-[20px]">
-    <div className="max-w-[800px] mx-auto">
-        <div data-gsap-fade-up className="flex flex-col items-center text-center max-w-[500px] mx-auto mb-8 md:mb-10">
-            <h2 className="text-3xl md:text-[48px] md:leading-[1.1] font-bold">Common Queries</h2>
+    <section id="faq" className="max-w-[1200px] mx-auto py-10 md:py-16 px-4 md:px-6 bg-neutral-surfaceAlt md:rounded-[20px]">
+        <div className="max-w-[800px] mx-auto">
+            <div data-gsap-fade-up className="flex flex-col items-center text-center max-w-[500px] mx-auto mb-8 md:mb-10">
+                <h2 className="text-3xl md:text-[48px] md:leading-[1.1] font-bold">Common Queries</h2>
+            </div>
+            <div className="max-w-3xl mx-auto flex flex-col gap-3">
+                <Accordion type="single" collapsible className="w-full space-y-3">
+                    {faqItems.map((item, i) => (
+                        <AccordionItem key={i} value={`item-${i}`} data-gsap-fade-up className="border border-neutral-border bg-neutral-bg rounded-xl px-5 hover:bg-neutral-surface transition-colors">
+                            <AccordionTrigger className="text-lg font-semibold text-left hover:no-underline py-4">
+                                {item.question}
+                            </AccordionTrigger>
+                            <AccordionContent>
+                                <p className="pt-2 pb-4 text-neutral-text-muted leading-relaxed">{item.answer}</p>
+                            </AccordionContent>
+                        </AccordionItem>
+                    ))}
+                </Accordion>
+            </div>
         </div>
-        <div className="max-w-3xl mx-auto flex flex-col gap-3">
-             <Accordion type="single" collapsible className="w-full space-y-3">
-                {faqItems.map((item, i) => (
-                    <AccordionItem key={i} value={`item-${i}`} data-gsap-fade-up className="border border-neutral-border bg-neutral-bg rounded-xl px-5 hover:bg-neutral-surface transition-colors">
-                        <AccordionTrigger className="text-lg font-semibold text-left hover:no-underline py-4">
-                            {item.question}
-                        </AccordionTrigger>
-                        <AccordionContent>
-                           <p className="pt-2 pb-4 text-neutral-text-muted leading-relaxed">{item.answer}</p>
-                        </AccordionContent>
-                    </AccordionItem>
-                ))}
-            </Accordion>
-        </div>
-    </div>
-</section>
+    </section>
 );
 
 const ContactSection = () => (
-  <section id="contact" className="max-w-[1200px] mx-auto py-10 md:py-16 px-4 md:px-6">
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-      <div data-gsap-fade-up>
-        <h2 className="text-3xl md:text-[48px] md:leading-[1.1] font-bold mb-4">Talk to an Academic Counselor</h2>
-        <p className="text-neutral-text-muted text-base md:text-lg mb-6">Not sure which program fits you? Schedule a free counseling session today.</p>
-      </div>
-      <div data-gsap-fade-up className="bg-neutral-surface border border-neutral-border p-6 rounded-2xl shadow-sm">
-        <form action="/contact" className="flex flex-col gap-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <input type="text" name="name" placeholder="Full Name" className="w-full h-12 px-4 rounded-lg border border-neutral-border focus:border-brand outline-none bg-white" required />
-            <input type="email" name="email" placeholder="Email Address" className="w-full h-12 px-4 rounded-lg border border-neutral-border focus:border-brand outline-none bg-white" required />
-          </div>
-          <Button type="submit" size="lg" className="w-full h-11 rounded-lg font-semibold">
-            Request Callback
-          </Button>
-        </form>
-      </div>
-    </div>
-  </section>
+    <section id="contact" className="max-w-[1200px] mx-auto py-10 md:py-16 px-4 md:px-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+            <div data-gsap-fade-up>
+                <h2 className="text-3xl md:text-[48px] md:leading-[1.1] font-bold mb-4">Talk to an Academic Counselor</h2>
+                <p className="text-neutral-text-muted text-base md:text-lg mb-6">Not sure which program fits you? Schedule a free counseling session today.</p>
+            </div>
+            <div data-gsap-fade-up className="bg-neutral-surface border border-neutral-border p-6 rounded-2xl shadow-sm">
+                <form action="/contact" className="flex flex-col gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input type="text" name="name" placeholder="Full Name" className="w-full h-12 px-4 rounded-lg border border-neutral-border focus:border-brand outline-none bg-white" required />
+                        <input type="email" name="email" placeholder="Email Address" className="w-full h-12 px-4 rounded-lg border border-neutral-border focus:border-brand outline-none bg-white" required />
+                    </div>
+                    <Button type="submit" size="lg" className="w-full h-11 rounded-lg font-semibold">
+                        Request Callback
+                    </Button>
+                </form>
+            </div>
+        </div>
+    </section>
 );
