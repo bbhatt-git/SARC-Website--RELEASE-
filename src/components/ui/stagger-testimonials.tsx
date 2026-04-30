@@ -1,171 +1,129 @@
 "use client"
 
-import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import React, { useRef, useState, useEffect } from 'react';
+import { motion, MotionValue, useTransform, useSpring } from 'framer-motion';
+import { Quote } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { TESTIMONIALS } from '@/lib/constants';
 import Image from 'next/image';
 
-const SQRT_5000 = Math.sqrt(5000);
-
-const testimonialsData = TESTIMONIALS.map((t, i) => ({
-  ...t,
-  tempId: i,
-}));
-
-type Testimonial = (typeof testimonialsData)[0];
-
 interface TestimonialCardProps {
-  position: number;
-  testimonial: Testimonial;
-  handleMove: (steps: number) => void;
-  cardSize: number;
+  testimonial: typeof TESTIMONIALS[0];
+  className?: string;
 }
 
-const TestimonialCard: React.FC<TestimonialCardProps> = ({ 
-  position, 
-  testimonial, 
-  handleMove, 
-  cardSize 
-}) => {
-  const isCenter = position === 0;
-
+const TestimonialCard: React.FC<TestimonialCardProps> = ({ testimonial, className }) => {
   return (
-    <div
-      onClick={() => handleMove(position)}
-      className={cn(
-        "absolute left-1/2 top-1/2 cursor-pointer border-2 p-8 transition-all duration-500 ease-in-out",
-        isCenter 
-          ? "z-10 bg-primary text-primary-foreground border-primary" 
-          : "z-0 bg-card text-card-foreground border-border hover:border-primary/50"
-      )}
-      style={{
-        width: cardSize,
-        height: cardSize,
-        clipPath: `polygon(50px 0%, calc(100% - 50px) 0%, 100% 50px, 100% 100%, calc(100% - 50px) 100%, 50px 100%, 0 100%, 0 0)`,
-        transform: `
-          translate(-50%, -50%) 
-          translateX(${(cardSize / 1.5) * position}px)
-          translateY(${isCenter ? -65 : position % 2 ? 15 : -15}px)
-          rotate(${isCenter ? 0 : position % 2 ? 2.5 : -2.5}deg)
-        `,
-        boxShadow: isCenter ? "0px 8px 0px 4px hsl(var(--border))" : "0px 0px 0px 0px transparent"
-      }}
-    >
-      <span
-        className="absolute block origin-top-right rotate-45 bg-border"
-        style={{
-          right: -2,
-          top: 48,
-          width: SQRT_5000,
-          height: 2
-        }}
-      />
-      <div
-        className="relative mb-4 h-14 w-12"
-        style={{
-          boxShadow: "3px 3px 0px hsl(var(--background))"
-        }}
-      >
-        <Image
-          src={testimonial.image}
-          alt={testimonial.author}
-          fill
-          className="bg-muted object-cover object-top"
-        />
+    <div className={cn(
+      "w-[300px] md:w-[400px] flex-shrink-0 bg-white/80 dark:bg-neutral-surface/80 backdrop-blur-md border border-neutral-border/50 rounded-[24px] p-6 shadow-sm dark:shadow-xl hover:shadow-2xl transition-all duration-500 group flex flex-col justify-between",
+      className
+    )}>
+      <div className="relative mb-6">
+        <div className="absolute -top-4 -left-4 text-brand/5 group-hover:text-brand/10 transition-colors">
+          <Quote className="w-8 h-8 rotate-180" />
+        </div>
+        <p className="text-foreground/90 font-medium leading-relaxed text-sm md:text-[15px] relative z-10 italic">
+          "{testimonial.text}"
+        </p>
       </div>
-      <h3 className={cn(
-        "text-base sm:text-xl font-medium",
-        isCenter ? "text-primary-foreground" : "text-foreground"
-      )}>
-        "{testimonial.text}"
-      </h3>
-      <p className={cn(
-        "absolute bottom-8 left-8 right-8 mt-2 text-sm italic",
-        isCenter ? "text-primary-foreground/80" : "text-muted-foreground"
-      )}>
-        - {testimonial.author}, {testimonial.role}
-      </p>
+      
+      <div className="flex items-center gap-4 border-t border-neutral-border/20 pt-4 mt-auto">
+        <div className="relative h-10 w-10 rounded-full overflow-hidden ring-2 ring-brand/10">
+          <Image
+            src={testimonial.image}
+            alt={testimonial.author}
+            fill
+            className="object-cover"
+          />
+        </div>
+        <div className="flex flex-col">
+          <span className="font-bold text-foreground text-[13px] md:text-sm tracking-tight">{testimonial.author}</span>
+          <span className="text-[10px] text-brand font-bold uppercase tracking-[0.1em]">{testimonial.role}</span>
+        </div>
+      </div>
     </div>
   );
 };
 
-export const StaggerTestimonials: React.FC = () => {
-  const [cardSize, setCardSize] = useState(365);
-  const [testimonialsList, setTestimonialsList] = useState(testimonialsData);
-
-  const handleMove = (steps: number) => {
-    const newList = [...testimonialsList];
-    if (steps > 0) {
-      for (let i = steps; i > 0; i--) {
-        const item = newList.shift();
-        if (!item) return;
-        newList.push({ ...item, tempId: Math.random() });
-      }
-    } else {
-      for (let i = steps; i < 0; i++) {
-        const item = newList.pop();
-        if (!item) return;
-        newList.unshift({ ...item, tempId: Math.random() });
-      }
-    }
-    setTestimonialsList(newList);
-  };
+export const StaggerTestimonials: React.FC<{ scrollYProgress: MotionValue<number> }> = ({ scrollYProgress }) => {
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const updateSize = () => {
-      const { matches } = window.matchMedia("(min-width: 640px)");
-      setCardSize(matches ? 365 : 290);
-    };
-
-    updateSize();
-    window.addEventListener("resize", updateSize);
-    return () => window.removeEventListener("resize", updateSize);
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  const row1 = TESTIMONIALS.slice(0, Math.ceil(TESTIMONIALS.length / 2));
+  const row2 = TESTIMONIALS.slice(Math.ceil(TESTIMONIALS.length / 2));
+
+  // Significant duplication for aggressive parallax without gaps
+  const row1Items = [...row1, ...row1, ...row1, ...row1, ...row1];
+  const row2Items = [...row2, ...row2, ...row2, ...row2, ...row2];
+
+  // Aggressive parallax range for "moving bar" feel
+  const row1X = useTransform(scrollYProgress, [0, 1], ["30%", "-120%"]);
+  const row2X = useTransform(scrollYProgress, [0, 1], ["-120%", "30%"]);
+  
+  // Subtle skew based on scroll for dynamic feel
+  const skew = useTransform(scrollYProgress, [0, 1], [2, -2]);
+
+  const smoothRow1X = useSpring(row1X, { stiffness: 50, damping: 30, restDelta: 0.001 });
+  const smoothRow2X = useSpring(row2X, { stiffness: 50, damping: 30, restDelta: 0.001 });
+  const smoothSkew = useSpring(skew, { stiffness: 50, damping: 30 });
+
+  if (isMobile) {
+    return (
+      <div className="w-full overflow-hidden py-8 relative flex flex-col gap-6">
+        <div className="absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-neutral-surfaceAlt via-neutral-surfaceAlt/80 to-transparent z-10 pointer-events-none" />
+        <div className="absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-neutral-surfaceAlt via-neutral-surfaceAlt/80 to-transparent z-10 pointer-events-none" />
+        
+        <motion.div 
+          className="flex gap-4 px-4 w-max"
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{
+            duration: 35,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+        >
+          {[...TESTIMONIALS, ...TESTIMONIALS].map((testimonial, i) => (
+            <TestimonialCard key={i} testimonial={testimonial} className="w-[280px]" />
+          ))}
+        </motion.div>
+      </div>
+    );
+  }
+
   return (
-    <div
-      className="relative w-full overflow-hidden"
-      style={{ height: 600 }}
-    >
-      {testimonialsList.map((testimonial, index) => {
-        const position = index - Math.floor(testimonialsList.length / 2);
-        return (
-          <TestimonialCard
-            key={testimonial.tempId}
-            testimonial={testimonial}
-            handleMove={handleMove}
-            position={position}
-            cardSize={cardSize}
-          />
-        );
-      })}
-      <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2">
-        <button
-          onClick={() => handleMove(-1)}
-          className={cn(
-            "flex h-14 w-14 items-center justify-center text-2xl transition-colors",
-            "bg-background border-2 border-border hover:bg-primary hover:text-primary-foreground",
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-          )}
-          aria-label="Previous testimonial"
+    <div className="w-full flex flex-col gap-10 py-10 relative select-none overflow-hidden">
+      <div className="absolute inset-y-0 left-0 w-60 bg-gradient-to-r from-neutral-surfaceAlt via-neutral-surfaceAlt/50 to-transparent z-10 pointer-events-none" />
+      <div className="absolute inset-y-0 right-0 w-60 bg-gradient-to-l from-neutral-surfaceAlt via-neutral-surfaceAlt/50 to-transparent z-10 pointer-events-none" />
+
+      {/* Row 1: Left to Right on Scroll */}
+      <div className="w-full overflow-visible">
+        <motion.div 
+          style={{ x: smoothRow1X, skewX: smoothSkew }} 
+          className="flex gap-10 w-max"
         >
-          <ChevronLeft />
-        </button>
-        <button
-          onClick={() => handleMove(1)}
-          className={cn(
-            "flex h-14 w-14 items-center justify-center text-2xl transition-colors",
-            "bg-background border-2 border-border hover:bg-primary hover:text-primary-foreground",
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-          )}
-          aria-label="Next testimonial"
+          {row1Items.map((testimonial, i) => (
+            <TestimonialCard key={i} testimonial={testimonial} />
+          ))}
+        </motion.div>
+      </div>
+
+      {/* Row 2: Right to Left on Scroll */}
+      <div className="w-full overflow-visible">
+        <motion.div 
+          style={{ x: smoothRow2X, skewX: smoothSkew }} 
+          className="flex gap-10 w-max"
         >
-          <ChevronRight />
-        </button>
+          {row2Items.map((testimonial, i) => (
+            <TestimonialCard key={i} testimonial={testimonial} />
+          ))}
+        </motion.div>
       </div>
     </div>
   );
 };
-
-    

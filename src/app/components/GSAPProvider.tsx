@@ -21,8 +21,8 @@ export default function GSAPProvider() {
     if (!isMobile) {
       let targetY = window.scrollY;
       let currentY = window.scrollY;
-      const lerp = 0.01; 
-      const speed = 0.3; 
+      const lerp = 0.02;
+      const speed = 0.4;
 
       obs = Observer.create({
         target: window,
