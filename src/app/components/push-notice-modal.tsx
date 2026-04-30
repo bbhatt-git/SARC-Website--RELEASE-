@@ -7,6 +7,7 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
+  DialogClose,
 } from "@/components/ui/dialog";
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { type PushNotice } from '@/app/admin/actions';
@@ -24,6 +25,15 @@ export function PushNoticeModal({ notices }: PushNoticeModalProps) {
   const activeNotices = notices.filter(notice => notice.is_active);
 
   const currentNotice = activeNotices[currentIndex];
+
+  useEffect(() => {
+    if (isOpen) {
+      document.documentElement.classList.add('modal-open');
+    } else {
+      document.documentElement.classList.remove('modal-open');
+    }
+    return () => document.documentElement.classList.remove('modal-open');
+  }, [isOpen]);
 
   useEffect(() => {
     // Show modal only once if there are active notices
@@ -58,7 +68,11 @@ export function PushNoticeModal({ notices }: PushNoticeModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="sm:max-w-[800px] p-0 overflow-hidden bg-transparent border-0 shadow-none">
+      <DialogContent className="!w-[95vw] md:!w-auto !max-w-[95vw] md:!max-w-fit !p-0 !bg-transparent !border-0 !shadow-none !gap-0 !outline-none !ring-0 [&>button:last-child]:hidden">
+        <DialogClose className="absolute -top-4 -right-4 md:-top-5 md:-right-5 z-[60] h-10 w-10 md:h-12 md:w-12 flex items-center justify-center rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white shadow-2xl transition-all hover:bg-black/80 hover:scale-110 active:scale-95 group">
+          <X className="h-5 w-5 md:h-6 md:w-6 transition-transform group-hover:rotate-90 duration-300" />
+          <span className="sr-only">Close</span>
+        </DialogClose>
         <VisuallyHidden>
           <DialogTitle>Push Notice</DialogTitle>
         </VisuallyHidden>
@@ -85,12 +99,12 @@ export function PushNoticeModal({ notices }: PushNoticeModalProps) {
 
         {/* Image only - no text, no buttons */}
         {currentNotice.image_url && (
-          <div className="relative w-full">
+          <div className="relative w-full rounded-2xl overflow-hidden shadow-2xl">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={currentNotice.image_url}
               alt="Push notice"
-              className="w-full object-contain max-h-[80vh]"
+              className="w-full object-contain max-h-[85vh]"
             />
           </div>
         )}

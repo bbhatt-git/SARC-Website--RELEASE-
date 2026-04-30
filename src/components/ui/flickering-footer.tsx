@@ -402,11 +402,17 @@ export const FlickeringFooter = () => {
       <div className="border-t border-neutral-border/30 py-8 bg-neutral-surface/20">
         <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-muted-foreground/60">
           <p>© {new Date().getFullYear()} SARC Education Foundation. All rights reserved.</p>
-          <div className="flex gap-6">
-            <Link href="/privacy" className="hover:text-brand transition-colors">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-brand transition-colors">Terms of Service</Link>
-            <Link href="/cookies" className="hover:text-brand transition-colors">Cookie Settings</Link>
-          </div>
+          <p className="flex items-center gap-1">
+            Designed & Crafted by 
+            <a 
+              href="https://bbhatt.com.np" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="text-brand font-bold hover:underline"
+            >
+              Bhupesh Bhatt
+            </a>
+          </p>
         </div>
       </div>
     </footer>

@@ -29,6 +29,11 @@ export default function GSAPProvider() {
         type: "wheel,touch,pointer",
         preventDefault: true,
         onChange: (self) => {
+          if (document.body.hasAttribute('data-radix-scroll-lock') || document.documentElement.classList.contains('modal-open')) {
+            targetY = window.scrollY;
+            currentY = window.scrollY;
+            return;
+          }
           targetY += self.deltaY * speed;
           const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
           targetY = Math.max(0, Math.min(targetY, maxScroll));
@@ -36,6 +41,7 @@ export default function GSAPProvider() {
       });
 
       tickerUpdate = () => {
+        if (document.body.hasAttribute('data-radix-scroll-lock') || document.documentElement.classList.contains('modal-open')) return;
         currentY += (targetY - currentY) * lerp;
         window.scrollTo(0, currentY);
         ScrollTrigger.update();
